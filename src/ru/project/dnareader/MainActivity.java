@@ -9,11 +9,7 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
     	TextView tv = new TextView(this);
-        tv.setText(Working_with_jni.stringFromJNI());
+        tv.setText(WorkingWithJni.stringFromJNI());
         setContentView(tv);
-    }
-    
-    
-
-    
+    }    
 }

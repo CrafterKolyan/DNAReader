@@ -1,9 +1,8 @@
 package ru.project.dnareader;
 
-public class Working_with_jni {
+public class WorkingWithJni {
 	static{
     	System.loadLibrary("hello-jni");
 	}
-    
     public native static String stringFromJNI();
 }
