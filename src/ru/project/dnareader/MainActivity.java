@@ -1,7 +1,5 @@
 package ru.project.dnareader;
 
-import java.net.URISyntaxException;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
