@@ -62,8 +62,13 @@ include $(PREBUILT_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)
 
-LOCAL_MODULE    := NativeLibraryhello-jni
+LOCAL_MODULE    := NativeLibrary
 LOCAL_SRC_FILES := NativeLibrary.cpp
+
+APP_CPPFLAGS += -frtti
+APP_CPPFLAGS += -fexceptions
+
+LOCAL_LDLIBS := -L$(SYSROOT)/usr/lib -llog
 LOCAL_SRC_FILES += /embossLIB
 LOCAL_LDLIBS    := -llog 
 LOCAL_C_INCLUDES := /include

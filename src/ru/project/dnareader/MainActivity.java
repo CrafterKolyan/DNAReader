@@ -24,6 +24,8 @@ public class MainActivity extends Activity implements OnClickListener{
         btn = (Button) findViewById(R.id.btn);
         tv = (TextView) findViewById(R.id.textView1);
         btn.setOnClickListener(this);
+        
+        tv.setText(WorkingWithJni.stringFromJNI());
         }
         
 	@Override
