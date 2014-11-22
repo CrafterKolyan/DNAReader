@@ -1,8 +1,12 @@
 package ru.project.dnareader;
 
+import java.net.URISyntaxException;
+
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -12,14 +16,15 @@ import android.widget.Toast;
 public class MainActivity extends Activity implements OnClickListener{
 
 	Button btn;
+	String filePath = null;
+	TextView tv;
 	
     protected void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
     	setContentView(R.layout.main);
-//    	TextView tv = new TextView(this);
-//        tv.setText(WorkingWithJni.stringFromJNI());
-//        setContentView(tv);
+    	
         btn = (Button) findViewById(R.id.btn);
+        tv = (TextView) findViewById(R.id.textView1);
         btn.setOnClickListener(this);
         }
         
@@ -29,6 +34,7 @@ public class MainActivity extends Activity implements OnClickListener{
 		switch (v.getId()){
 		case R.id.btn:
 			showFileChooser();
+			
 			break;
 		}
 		
@@ -51,8 +57,6 @@ public class MainActivity extends Activity implements OnClickListener{
                     Toast.LENGTH_SHORT).show();
         }
     }
-    /*You would then listen for the selected file's Uri in onActivityResult() 
-    *like so:
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -63,8 +67,15 @@ public class MainActivity extends Activity implements OnClickListener{
                 Uri uri = data.getData();
                 Log.d("TAG", "File Uri: " + uri.toString());
                 // Get the path
-                String path = FileUtils.getPath(this, uri);
-                Log.d("TAG", "File Path: " + path);
+                
+				try {
+					filePath = FileUtils.getPath(this, uri);
+				} catch (URISyntaxException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+                Log.d("TAG", "File Path: " + filePath);
+                tv.setText(filePath);
                 // Get the file instance
                 // File file = new File(path);
                 // Initiate the upload
@@ -72,30 +83,7 @@ public class MainActivity extends Activity implements OnClickListener{
             break;
         }
         super.onActivityResult(requestCode, resultCode, data);
-    }
-   // The getPath() method in my FileUtils.java is:
-
-    public static String getPath(Context context, Uri uri) throws URISyntaxException {
-        if ("content".equalsIgnoreCase(uri.getScheme())) {
-            String[] projection = { "_data" };
-            Cursor cursor = null;
-
-            try {
-                cursor = context.getContentResolver().query(uri, projection, null, null, null);
-                int column_index = cursor.getColumnIndexOrThrow("_data");
-                if (cursor.moveToFirst()) {
-                    return cursor.getString(column_index);
-                }
-            } catch (Exception e) {
-                // Eat it
-            }
-        }
-        else if ("file".equalsIgnoreCase(uri.getScheme())) {
-            return uri.getPath();
-        }
-
-        return null;
-    } */
+    }  
 
 	
 }
