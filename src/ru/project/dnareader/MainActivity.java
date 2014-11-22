@@ -16,7 +16,7 @@ import android.widget.Toast;
 public class MainActivity extends Activity implements OnClickListener{
 
 	Button btn;
-	String filePath = null;
+//	String filePath = null;
 	TextView tv;
 	
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,15 +67,15 @@ public class MainActivity extends Activity implements OnClickListener{
                 Uri uri = data.getData();
                 Log.d("TAG", "File Uri: " + uri.toString());
                 // Get the path
-                
-				try {
-					filePath = FileUtils.getPath(this, uri);
-				} catch (URISyntaxException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-                Log.d("TAG", "File Path: " + filePath);
-                tv.setText(filePath);
+                tv.setText(uri.toString());
+//				try {
+//					filePath = FileUtils.getPath(this, uri);
+//				} catch (URISyntaxException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//                Log.d("TAG", "File Path: " + filePath);
+//                
                 // Get the file instance
                 // File file = new File(path);
                 // Initiate the upload
