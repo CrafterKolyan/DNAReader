@@ -9,13 +9,11 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
     	TextView tv = new TextView(this);
-        tv.setText(stringFromJNI());
+        tv.setText(Working_with_jni.stringFromJNI());
         setContentView(tv);
     }
     
-    static{
-    	System.loadLibrary("hello-jni");
-	}
     
-    public native static String stringFromJNI();
+
+    
 }

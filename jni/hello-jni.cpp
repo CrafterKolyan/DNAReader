@@ -19,7 +19,7 @@ extern "C" {
  *   apps/samples/hello-jni/project/src/com/example/hellojni/HelloJni.java
  */
 jstring
-Java_ru_project_dnareader_MainActivity_stringFromJNI( JNIEnv* env,
+Java_ru_project_dnareader_Working_with_jni_stringFromJNI( JNIEnv* env,
                                                   jobject thiz )
 {
     return env->NewStringUTF("Hello from JNI !");
