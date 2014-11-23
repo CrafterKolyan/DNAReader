@@ -1,1 +1,1 @@
-это README для ветки StrComp
+это README для ветки StrComp add with git
