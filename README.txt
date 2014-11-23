@@ -1,0 +1,1 @@
+это README для ветки StrComp
