@@ -1,0 +1,7 @@
+embossLIB
+include
+include/eexpat
+include/epcre
+include/eplplot
+include/ezlib
+C:\java\android-ndk-r10c\platforms\android-19\arch-x86\usr\include
