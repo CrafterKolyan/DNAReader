@@ -26,6 +26,8 @@ public class MainActivity extends Activity implements OnClickListener{
         btn = (Button) findViewById(R.id.btn);
         tv = (TextView) findViewById(R.id.textView1);
         btn.setOnClickListener(this);
+        
+        tv.setText(WorkingWithJni.stringFromJNI());
         }
         
 	@Override
@@ -34,17 +36,16 @@ public class MainActivity extends Activity implements OnClickListener{
 		switch (v.getId()){
 		case R.id.btn:
 			showFileChooser();
-			
 			break;
 		}
 		
 	}
-   
+	   
     private static final int FILE_SELECT_CODE = 0;
 
     private void showFileChooser() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT); 
-        intent.setType("*/*"); 
+        intent.setType("*.ab1/*.abi"); 
         intent.addCategory(Intent.CATEGORY_OPENABLE);
 
         try {
@@ -60,6 +61,7 @@ public class MainActivity extends Activity implements OnClickListener{
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    	String filePath = null;
         switch (requestCode) {
             case FILE_SELECT_CODE:
             if (resultCode == RESULT_OK) {
@@ -68,14 +70,15 @@ public class MainActivity extends Activity implements OnClickListener{
                 Log.d("TAG", "File Uri: " + uri.toString());
                 // Get the path
                 tv.setText(uri.toString());
-//				try {
-//					filePath = FileUtils.getPath(this, uri);
-//				} catch (URISyntaxException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
+				try {
+					filePath = FileUtils.getPath(this, uri);
+				} catch (URISyntaxException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				Toast.makeText(this, filePath, Toast.LENGTH_SHORT).show();
 //                Log.d("TAG", "File Path: " + filePath);
-//                
+                
                 // Get the file instance
                 // File file = new File(path);
                 // Initiate the upload
@@ -84,6 +87,6 @@ public class MainActivity extends Activity implements OnClickListener{
         }
         super.onActivityResult(requestCode, resultCode, data);
     }  
-
+    
 	
 }
