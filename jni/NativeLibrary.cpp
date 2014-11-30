@@ -2,6 +2,7 @@
 #include <string>
 #include <iostream>
 #include "AndroidLog.hpp"
+#include <embossLIB/emboss.h>
 
 extern "C" {
 
@@ -11,12 +12,16 @@ extern "C" {
  *
  *   apps/samples/hello-jni/project/src/com/example/hellojni/HelloJni.java
  */
-jstring
+jint
 Java_ru_project_dnareader_WorkingWithJni_stringFromJNI( JNIEnv* env,
-                                                  jobject thiz )
+												  jobject thiz )
 {
-    return env->NewStringUTF("Hello from JNI !");
+	AjPFile filename = ajFileNewinNameC("123.ab1");
+	if(!ajSeqABITest(filename))
+		return env->NewStringUTF("Not good!");
+	return env->NewStringUTF("fine!");
 }
 
+}
 }
 

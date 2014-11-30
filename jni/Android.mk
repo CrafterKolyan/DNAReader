@@ -69,13 +69,14 @@ APP_CPPFLAGS += -frtti
 APP_CPPFLAGS += -fexceptions
 
 LOCAL_LDLIBS := -L$(SYSROOT)/usr/lib -llog
-LOCAL_SRC_FILES += /embossLIB
-LOCAL_LDLIBS    := -llog 
-LOCAL_C_INCLUDES := /include
-LOCAL_C_INCLUDES += /include/epcre
-LOCAL_C_INCLUDES += /include/eexpat
-LOCAL_C_INCLUDES += /include/eplplot
-LOCAL_C_INCLUDES += /include/ezlib
+LOCAL_SRC_FILES += embossLIB
+LOCAL_LDLIBS    := -llog
+LOCAL_C_INCLUDES :=\
+	include\
+	include/epcre\
+	include/eexpat\
+	include/eplplot\
+	include/ezlib\
 
 LOCAL_STATIC_LIBRARIES := \
 	libacd\
