@@ -68,7 +68,7 @@ LOCAL_SRC_FILES := NativeLibrary.cpp
 APP_CPPFLAGS += -frtti
 APP_CPPFLAGS += -fexceptions
 
-LOCAL_LDLIBS := -L$(SYSROOT)/usr/lib -llog
+LOCAL_LDLIBS := -L$(SYSROOT)/usr/local/lib -llog
 LOCAL_SRC_FILES += embossLIB
 LOCAL_LDLIBS    := -llog
 LOCAL_C_INCLUDES :=\
