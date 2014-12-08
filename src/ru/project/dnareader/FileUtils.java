@@ -1,33 +1,39 @@
 package ru.project.dnareader;
 
-import java.net.URISyntaxException;
+import android.annotation.SuppressLint;
+import java.io.File;
 
-import android.content.Context;
-import android.database.Cursor;
-import android.net.Uri;
-
+/**
+ * A set of tools for file operations
+ */
 public class FileUtils {
 
-	public static String getPath(Context context, Uri uri) throws URISyntaxException {
-        if ("content".equalsIgnoreCase(uri.getScheme())) {
-            String[] projection = { "_data" };
-            Cursor cursor = null;
+	/** Filter which accepts every file */
+	public static final String FILTER_ALLOW_ALL = "*.*";
 
-            try {
-                cursor = context.getContentResolver().query(uri, projection, null, null, null);
-                int column_index = cursor.getColumnIndexOrThrow("_data");
-                if (cursor.moveToFirst()) {
-                    return cursor.getString(column_index);
-                }
-            } catch (Exception e) {
-                // Eat it
-            }
-        }
-        else if ("file".equalsIgnoreCase(uri.getScheme())) {
-            return uri.getPath();
-        }
-
-        return null;
-    } 
-	
+	/**
+	 * This method checks that the file is accepted by the filter
+	 * 
+	 * @param file
+	 *            - file that will be checked if there is a specific type
+	 * @param filter
+	 *            - criterion - the file type(for example ".jpg")
+	 * @return true - if file meets the criterion - false otherwise.
+	 */
+	@SuppressLint("DefaultLocale")
+	public static boolean accept(final File file, final String filter) {
+		if (filter.compareTo(FILTER_ALLOW_ALL) == 0) {
+			return true;
+		}
+		if (file.isDirectory()) {
+			return true;
+		}
+		int lastIndexOfPoint = file.getName().lastIndexOf('.');
+		if (lastIndexOfPoint == -1) {
+			return false;
+		}
+		String fileType = file.getName().substring(lastIndexOfPoint)
+				.toLowerCase();
+		return fileType.compareTo(filter) == 0;
+	}
 }
