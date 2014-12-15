@@ -5,8 +5,8 @@
 #include <embossLIB/emboss.h>
 #include <embossLIB/ajfile.h>
 
-JNIEXPORT jstring JNICALL Java_ru_project_dnareader_WorkingWithJni_stringFromJNI (JNIEnv *env, jclass object){
-    const char* filename = "/sdcard/Download/123.ab1";       // Имя файла
+JNIEXPORT jstring JNICALL Java_ru_project_dnareader_WorkingWithJni_stringFromJNI (JNIEnv *env, jclass object, jstring filename2){
+    const char *filename= env->GetStringUTFChars(filename2,0);       // Имя файла
     AjPFile file = ajFileNewInNameC(filename);               // Переменная файла
     AjPStr filenameS = ajStrNewS(ajFileGetPrintnameS(file)); // Имя файла в формате библиотеки (обычные string'и не берёт)
     LOGI("here Everything is good");

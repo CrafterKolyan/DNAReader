@@ -22,7 +22,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		tv = (TextView) findViewById(R.id.textView1);
 		btn.setOnClickListener(this);
 
-		tv.setText(WorkingWithJni.stringFromJNI());
+		// tv.setText(WorkingWithJni.stringFromJNI());
 
 	}
 
@@ -45,5 +45,12 @@ public class MainActivity extends Activity implements OnClickListener {
 		final FileSelector fileSelector = new FileSelector(MainActivity.this,
 				mFileFilter);
 		fileSelector.showDialogs();
+	}
+
+	public static void continuee() { // эта функция работает с jni после
+										// закрытия диалогового окна
+
+		WorkingWithJni.stringFromJNI(filePath);
+
 	}
 }

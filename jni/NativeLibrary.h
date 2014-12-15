@@ -13,7 +13,7 @@ extern "C" {
  * Signature: ()Ljava/lang/String;
  */
 JNIEXPORT jstring JNICALL Java_ru_project_dnareader_WorkingWithJni_stringFromJNI
-  (JNIEnv *, jclass);
+  (JNIEnv *, jclass, jstring);
 
 #ifdef __cplusplus
 }

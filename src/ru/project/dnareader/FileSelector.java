@@ -243,6 +243,8 @@ public class FileSelector {
 
 	/** Simple wrapper around the Dialog.dissmiss() method. */
 	public void dismiss() {
+
 		mDialog.dismiss();
+		MainActivity.continuee();
 	}
 }
