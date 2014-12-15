@@ -1,56 +1,56 @@
 obj/local/armeabi/objs/NativeLibrary/NativeLibrary.o: \
  jni/NativeLibrary.cpp \
- /home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/jni.h \
- /home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/sys/cdefs.h \
- /home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/sys/cdefs_elf.h \
- /home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/android/api-level.h \
+ /cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/jni.h \
+ /cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/sys/cdefs.h \
+ /cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/sys/cdefs_elf.h \
+ /cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/android/api-level.h \
  jni/NativeLibrary.h \
- /home/ivan/java/android-ndk-r10/sources/cxx-stl/gnu-libstdc++/4.6/include/string \
+ /cygdrive/c/android-ndk-r10b/sources/cxx-stl/gnu-libstdc++/4.6/include/string \
  jni/AndroidLog.hpp \
- /home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/android/log.h \
+ /cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/android/log.h \
  jni/embossLIB/emboss.h jni/embossLIB/ajax.h jni/embossLIB/ajdefine.h \
  jni/embossLIB/ajarch.h \
- /home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/stdlib.h \
- /home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/alloca.h \
- /home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/strings.h \
- /home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/memory.h \
+ /cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/stdlib.h \
+ /cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/alloca.h \
+ /cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/strings.h \
+ /cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/memory.h \
  jni/embossLIB/ajassert.h jni/embossLIB/ajstr.h jni/embossLIB/ajfile.h \
  jni/embossLIB/ajlist.h \
- /home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/sys/stat.h \
- /home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/linux/stat.h \
- /home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/endian.h \
- /home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/sys/endian.h \
- /home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/machine/endian.h \
+ /cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/sys/stat.h \
+ /cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/linux/stat.h \
+ /cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/endian.h \
+ /cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/sys/endian.h \
+ /cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/machine/endian.h \
  jni/embossLIB/ajfiledata.h jni/embossLIB/ajfileio.h \
  jni/embossLIB/ajfmt.h jni/embossLIB/ajmath.h jni/embossLIB/ajmem.h \
  jni/embossLIB/ajtime.h jni/embossLIB/ajutil.h jni/embossLIB/ajmess.h \
- /home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/setjmp.h \
- /home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/machine/setjmp.h \
+ /cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/setjmp.h \
+ /cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/machine/setjmp.h \
  jni/embossLIB/ajexcept.h jni/embossLIB/ajreg.h \
  jni/embossLIB/pcre_config.h jni/embossLIB/pcre_internal.h \
  jni/embossLIB/pcreemboss.h jni/embossLIB/pcre.h jni/embossLIB/ucp.h \
  jni/embossLIB/pcreposix.h jni/embossLIB/ajsys.h \
- /home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/sys/param.h \
- /home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/linux/param.h \
- /home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/asm/param.h \
- /home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/sys/socket.h \
- /home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/linux/socket.h \
- /home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/asm/socket.h \
- /home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/asm/sockios.h \
- /home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/linux/sockios.h \
- /home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/linux/uio.h \
- /home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/netinet/in.h \
- /home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/linux/in.h \
- /home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/asm/byteorder.h \
- /home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/linux/byteorder/little_endian.h \
- /home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/linux/byteorder/swab.h \
- /home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/linux/byteorder/generic.h \
- /home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/linux/in6.h \
- /home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/linux/ipv6.h \
- /home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/netinet/in6.h \
- /home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/arpa/inet.h \
- /home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/netdb.h \
- /home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/dirent.h \
+ /cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/sys/param.h \
+ /cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/linux/param.h \
+ /cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/asm/param.h \
+ /cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/sys/socket.h \
+ /cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/linux/socket.h \
+ /cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/asm/socket.h \
+ /cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/asm/sockios.h \
+ /cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/linux/sockios.h \
+ /cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/linux/uio.h \
+ /cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/netinet/in.h \
+ /cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/linux/in.h \
+ /cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/asm/byteorder.h \
+ /cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/linux/byteorder/little_endian.h \
+ /cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/linux/byteorder/swab.h \
+ /cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/linux/byteorder/generic.h \
+ /cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/linux/in6.h \
+ /cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/linux/ipv6.h \
+ /cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/netinet/in6.h \
+ /cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/arpa/inet.h \
+ /cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/netdb.h \
+ /cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/dirent.h \
  jni/embossLIB/ajtable.h jni/embossLIB/ajarr.h jni/embossLIB/ajsort.h \
  jni/embossLIB/ajquerydata.h jni/embossLIB/ajnam.h \
  jni/embossLIB/ajtagval.h jni/embossLIB/ajtextdata.h \
@@ -138,21 +138,21 @@ obj/local/armeabi/objs/NativeLibrary/NativeLibrary.o: \
  jni/embossLIB/embdmx.h jni/embossLIB/embexit.h jni/embossLIB/embindex.h \
  jni/embossLIB/embest.h jni/embossLIB/ajfile.h
 
-/home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/jni.h:
+/cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/jni.h:
 
-/home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/sys/cdefs.h:
+/cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/sys/cdefs.h:
 
-/home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/sys/cdefs_elf.h:
+/cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/sys/cdefs_elf.h:
 
-/home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/android/api-level.h:
+/cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/android/api-level.h:
 
 jni/NativeLibrary.h:
 
-/home/ivan/java/android-ndk-r10/sources/cxx-stl/gnu-libstdc++/4.6/include/string:
+/cygdrive/c/android-ndk-r10b/sources/cxx-stl/gnu-libstdc++/4.6/include/string:
 
 jni/AndroidLog.hpp:
 
-/home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/android/log.h:
+/cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/android/log.h:
 
 jni/embossLIB/emboss.h:
 
@@ -162,13 +162,13 @@ jni/embossLIB/ajdefine.h:
 
 jni/embossLIB/ajarch.h:
 
-/home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/stdlib.h:
+/cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/stdlib.h:
 
-/home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/alloca.h:
+/cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/alloca.h:
 
-/home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/strings.h:
+/cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/strings.h:
 
-/home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/memory.h:
+/cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/memory.h:
 
 jni/embossLIB/ajassert.h:
 
@@ -178,15 +178,15 @@ jni/embossLIB/ajfile.h:
 
 jni/embossLIB/ajlist.h:
 
-/home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/sys/stat.h:
+/cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/sys/stat.h:
 
-/home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/linux/stat.h:
+/cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/linux/stat.h:
 
-/home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/endian.h:
+/cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/endian.h:
 
-/home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/sys/endian.h:
+/cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/sys/endian.h:
 
-/home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/machine/endian.h:
+/cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/machine/endian.h:
 
 jni/embossLIB/ajfiledata.h:
 
@@ -204,9 +204,9 @@ jni/embossLIB/ajutil.h:
 
 jni/embossLIB/ajmess.h:
 
-/home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/setjmp.h:
+/cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/setjmp.h:
 
-/home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/machine/setjmp.h:
+/cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/machine/setjmp.h:
 
 jni/embossLIB/ajexcept.h:
 
@@ -226,47 +226,47 @@ jni/embossLIB/pcreposix.h:
 
 jni/embossLIB/ajsys.h:
 
-/home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/sys/param.h:
+/cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/sys/param.h:
 
-/home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/linux/param.h:
+/cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/linux/param.h:
 
-/home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/asm/param.h:
+/cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/asm/param.h:
 
-/home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/sys/socket.h:
+/cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/sys/socket.h:
 
-/home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/linux/socket.h:
+/cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/linux/socket.h:
 
-/home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/asm/socket.h:
+/cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/asm/socket.h:
 
-/home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/asm/sockios.h:
+/cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/asm/sockios.h:
 
-/home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/linux/sockios.h:
+/cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/linux/sockios.h:
 
-/home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/linux/uio.h:
+/cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/linux/uio.h:
 
-/home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/netinet/in.h:
+/cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/netinet/in.h:
 
-/home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/linux/in.h:
+/cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/linux/in.h:
 
-/home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/asm/byteorder.h:
+/cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/asm/byteorder.h:
 
-/home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/linux/byteorder/little_endian.h:
+/cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/linux/byteorder/little_endian.h:
 
-/home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/linux/byteorder/swab.h:
+/cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/linux/byteorder/swab.h:
 
-/home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/linux/byteorder/generic.h:
+/cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/linux/byteorder/generic.h:
 
-/home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/linux/in6.h:
+/cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/linux/in6.h:
 
-/home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/linux/ipv6.h:
+/cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/linux/ipv6.h:
 
-/home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/netinet/in6.h:
+/cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/netinet/in6.h:
 
-/home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/arpa/inet.h:
+/cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/arpa/inet.h:
 
-/home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/netdb.h:
+/cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/netdb.h:
 
-/home/ivan/java/android-ndk-r10/platforms/android-19/arch-arm/usr/include/dirent.h:
+/cygdrive/c/android-ndk-r10b/platforms/android-19/arch-arm/usr/include/dirent.h:
 
 jni/embossLIB/ajtable.h:
 

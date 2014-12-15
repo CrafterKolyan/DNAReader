@@ -6,7 +6,7 @@
 #include <embossLIB/ajfile.h>
 
 JNIEXPORT jstring JNICALL Java_ru_project_dnareader_WorkingWithJni_stringFromJNI (JNIEnv *env, jclass object){
-    const char* filename = "/emulated/0/Download/GJA1-19-II-1-ex1_GJA1-1F_A2.ab1";       // Имя файла
+    const char* filename = "/sdcard/Download/123.ab1";       // Имя файла
     AjPFile file = ajFileNewInNameC(filename);               // Переменная файла
     AjPStr filenameS = ajStrNewS(ajFileGetPrintnameS(file)); // Имя файла в формате библиотеки (обычные string'и не берёт)
     LOGI("here Everything is good");
@@ -24,6 +24,11 @@ JNIEXPORT jstring JNICALL Java_ru_project_dnareader_WorkingWithJni_stringFromJNI
     }
 
     LOGI("LOL IT WORKS");
+    AjPStr nseq = ajStrNew();
+    ajSeqABIReadSeq(file,18,21,&nseq);
+    LOGI("HERE IS MAGIC!");
+
+    return env->NewStringUTF(ajCharNewS(nseq));
 
     return env->NewStringUTF("fine!");
 }
