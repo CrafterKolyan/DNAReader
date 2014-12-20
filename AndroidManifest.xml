@@ -8,8 +8,8 @@
     <permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <uses-sdk
-        android:minSdkVersion="15"
-        android:targetSdkVersion="15" />
+        android:minSdkVersion="19"
+        android:targetSdkVersion="19" />
 
     <application
         android:allowBackup="true"

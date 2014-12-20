@@ -223,7 +223,7 @@ public class FileSelector {
 			Toast.makeText(mContext, itemPath, Toast.LENGTH_SHORT).show();
 			finalItimePath = itemPath;
 			MainActivity.filePath = itemPath;
-			MainActivity.tv.setText(finalItimePath);
+			MainActivity.tv1.setText(finalItimePath);
 			dismiss();
 		}
 	}

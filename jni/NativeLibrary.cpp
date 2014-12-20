@@ -5,6 +5,7 @@
 #include <embossLIB/emboss.h>
 #include <embossLIB/ajfile.h>
 
+
 JNIEXPORT jstring JNICALL Java_ru_project_dnareader_WorkingWithJni_stringFromJNI (JNIEnv *env, jclass object, jstring filename2){
     const char *filename= env->GetStringUTFChars(filename2,0);       // Имя файла
     AjPFile file = ajFileNewInNameC(filename);               // Переменная файла
@@ -28,7 +29,11 @@ JNIEXPORT jstring JNICALL Java_ru_project_dnareader_WorkingWithJni_stringFromJNI
     ajSeqABIReadSeq(file,18,21,&nseq);
     LOGI("HERE IS MAGIC!");
 
-    return env->NewStringUTF(ajCharNewS(nseq));
+//    AjPGraphdata tmp = ;
+//    graph tmp = new graph (;);
+
+
+//    return env->NewStringUTF(ajCharNewS(nseq));
 
     return env->NewStringUTF("fine!");
 }

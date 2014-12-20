@@ -2,39 +2,45 @@ package ru.project.dnareader;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class MainActivity extends Activity implements OnClickListener {
+public class MainActivity extends Activity {
 
 	Button btn;
 	// String filePath = null;
-	static TextView tv;
+	static TextView tv1;
+	static TextView tv2;
 	public static String filePath = null;
 
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
-		btn = (Button) findViewById(R.id.btn);
-		tv = (TextView) findViewById(R.id.textView1);
-		btn.setOnClickListener(this);
-
-		// tv.setText(WorkingWithJni.stringFromJNI());
-
+		// btn = (Button) findViewById(R.id.btn);
+		tv1 = (TextView) findViewById(R.id.textView1);
+		tv2 = (TextView) findViewById(R.id.textView2);
+		// btn.setOnClickListener(this);
 	}
 
 	@Override
-	public void onClick(View v) {
-		// TODO Auto-generated method stub
-		switch (v.getId()) {
-		case R.id.btn:
-			showFileSelector();
-			break;
-		}
+	public boolean onOptionsItemSelected(MenuItem item) {
 
+		switch (item.getItemId()) {
+		case R.id.loadFile:
+			showFileSelector();
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.main, menu);
+		return true;
 	}
 
 	private void showFileSelector() {
@@ -50,7 +56,8 @@ public class MainActivity extends Activity implements OnClickListener {
 	public static void continuee() { // эта функция работает с jni после
 										// закрытия диалогового окна
 
-		WorkingWithJni.stringFromJNI(filePath);
+		tv2.setText("status: " + WorkingWithJni.stringFromJNI(filePath));
 
 	}
+
 }
