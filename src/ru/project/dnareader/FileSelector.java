@@ -1,8 +1,11 @@
 package ru.project.dnareader;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+
+import org.biojava.bio.symbol.IllegalSymbolException;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -222,7 +225,7 @@ public class FileSelector {
 		} else if (itemLocation.isFile()) {
 			Toast.makeText(mContext, itemPath, Toast.LENGTH_SHORT).show();
 			finalItimePath = itemPath;
-			MainActivity.filePath = itemPath;
+			// MainActivity.filePath = itemPath;
 			MainActivity.tv1.setText(finalItimePath);
 			dismiss();
 		}
@@ -245,6 +248,14 @@ public class FileSelector {
 	public void dismiss() {
 
 		mDialog.dismiss();
-		MainActivity.continuee();
+		try {
+			MainActivity.continuee(finalItimePath);
+		} catch (IllegalSymbolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
