@@ -5,10 +5,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import org.biojava.bio.program.abi.ABITrace;
+import org.biojava.bio.seq.DNATools;
 import org.biojava.bio.symbol.IllegalSymbolException;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Environment;
 import android.view.View;
 import android.widget.AdapterView;
@@ -224,9 +227,31 @@ public class FileSelector {
 			makeList(mCurrentLocation);
 		} else if (itemLocation.isFile()) {
 			Toast.makeText(mContext, itemPath, Toast.LENGTH_SHORT).show();
-			finalItimePath = itemPath;
+			// finalItimePath = itemPath;
 			// MainActivity.filePath = itemPath;
-			MainActivity.tv1.setText(finalItimePath);
+			// File ABIfile = new File (itemPath);
+
+			// graphic a = new graphic(mContext, );
+
+			File ABIfile = new File(itemPath);
+			ABITrace ABITrace;
+			try {
+				// MainActivity.oncreat();
+				ABITrace = new ABITrace(ABIfile);
+				// graphic.a = ABITrace.getTrace(DNATools.a());
+
+				final graphic a = new graphic(mContext,
+						ABITrace.getTrace(DNATools.a()),
+						ABITrace.getTrace(DNATools.c()),
+						ABITrace.getTrace(DNATools.g()),
+						ABITrace.getTrace(DNATools.t()));
+				graphic.p.setColor(Color.GREEN);
+			} catch (IllegalSymbolException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
 			dismiss();
 		}
 	}
@@ -248,14 +273,5 @@ public class FileSelector {
 	public void dismiss() {
 
 		mDialog.dismiss();
-		try {
-			MainActivity.continuee(finalItimePath);
-		} catch (IllegalSymbolException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 }
