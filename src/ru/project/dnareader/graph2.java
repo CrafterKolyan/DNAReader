@@ -3,6 +3,8 @@ package ru.project.dnareader;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Path;
 import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -11,9 +13,30 @@ public class graph2 extends SurfaceView implements SurfaceHolder.Callback {
 
 	private DrawThread drawThread;
 
+	Path path;
+	public static Paint p;
+
+	float x = 10;
+
+	float side = 0;
+
+	boolean drag = false;
+	float dragX = 0;
+	float dragY = 0;
+
+	float canvasWidth = 0;
+	float canvasHeight = 0;
+
 	public graph2(Context context, AttributeSet attrs) {
 		super(context);
 		getHolder().addCallback(this);
+
+		path = new Path();
+
+		p = new Paint();
+		p.setStrokeWidth(6);
+		p.setStyle(Paint.Style.STROKE);
+		p.setColor(Color.BLUE);
 	}
 
 	@Override
@@ -64,7 +87,27 @@ public class graph2 extends SurfaceView implements SurfaceHolder.Callback {
 					canvas = surfaceHolder.lockCanvas(null);
 					if (canvas == null)
 						continue;
-					canvas.drawColor(Color.GREEN);
+					canvasWidth = canvas.getWidth();
+					canvasHeight = canvas.getHeight();
+					path.reset();
+					float canvasH = canvasHeight;
+					float canvasW = 50;
+					path.moveTo(x, canvasHeight);
+					// if (a == null) {
+					// p.setColor(Color.WHITE);
+					//
+					// }
+					while (canvasH > 100) {
+						path.lineTo(x + canvasW, canvasHeight - canvasH);
+						path.lineTo(x + canvasW + 50, canvasHeight);
+						canvasW += 100;
+						canvasH -= 100;
+					}
+					side = canvasW - 50;
+
+					canvas.drawPath(path, p);
+					// invalidate();
+					// canvas.drawColor(Color.GREEN);
 				} finally {
 					if (canvas != null) {
 						surfaceHolder.unlockCanvasAndPost(canvas);
