@@ -1,17 +1,11 @@
 package ru.project.dnareader;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import org.biojava.bio.program.abi.ABITrace;
-import org.biojava.bio.seq.DNATools;
-import org.biojava.bio.symbol.IllegalSymbolException;
-
 import android.app.Dialog;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Environment;
 import android.view.View;
 import android.widget.AdapterView;
@@ -233,26 +227,32 @@ public class FileSelector {
 
 			// graphic a = new graphic(mContext, );
 
-			File ABIfile = new File(itemPath);
-			ABITrace ABITrace;
-			try {
-				// MainActivity.oncreat();
-				ABITrace = new ABITrace(ABIfile);
-				// graphic.a = ABITrace.getTrace(DNATools.a());
+			// File ABIfile = new File(itemPath);
+			// ABITrace ABITrace;
+			// try {
+			// // MainActivity.oncreat();
+			// ABITrace = new ABITrace(ABIfile);
+			// // graphic.a = ABITrace.getTrace(DNATools.a());
+			//
+			// final graphic a = new graphic(mContext,
+			// ABITrace.getTrace(DNATools.a()),
+			// ABITrace.getTrace(DNATools.c()),
+			// ABITrace.getTrace(DNATools.g()),
+			// ABITrace.getTrace(DNATools.t()));
+			// graphic.p.setColor(Color.GREEN);
+			// } catch (IllegalSymbolException e) {
+			// e.printStackTrace();
+			// } catch (IOException e) {
+			// e.printStackTrace();
+			// }
+			mDialog.dismiss();
+			graph2.drawThread.setRunning(true);
+			graph2.drawThread.start();
 
-				final graphic a = new graphic(mContext,
-						ABITrace.getTrace(DNATools.a()),
-						ABITrace.getTrace(DNATools.c()),
-						ABITrace.getTrace(DNATools.g()),
-						ABITrace.getTrace(DNATools.t()));
-				graphic.p.setColor(Color.GREEN);
-			} catch (IllegalSymbolException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			// dismiss();
+			// graph2.drawThread.setRunning(true);
+			// graph2.drawThread.start();
 
-			dismiss();
 		}
 	}
 
@@ -269,9 +269,9 @@ public class FileSelector {
 		return finalItimePath;
 	}
 
-	/** Simple wrapper around the Dialog.dissmiss() method. */
-	public void dismiss() {
-
-		mDialog.dismiss();
-	}
+	// /** Simple wrapper around the Dialog.dissmiss() method. */
+	// public void dismiss() {
+	//
+	// mDialog.dismiss();
+	// }
 }

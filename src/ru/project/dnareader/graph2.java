@@ -11,12 +11,16 @@ import android.view.SurfaceView;
 
 public class graph2 extends SurfaceView implements SurfaceHolder.Callback {
 
-	private DrawThread drawThread;
+	static DrawThread drawThread;
+
+	// public static boolean check = false;
 
 	Path path;
 	public static Paint p;
 
 	float x = 10;
+
+	public static int mas[] = null;
 
 	float side = 0;
 
@@ -34,8 +38,9 @@ public class graph2 extends SurfaceView implements SurfaceHolder.Callback {
 		path = new Path();
 
 		p = new Paint();
-		p.setStrokeWidth(6);
-		p.setStyle(Paint.Style.STROKE);
+		p.setStrokeWidth(30);
+		// if (check)
+		// p.setStyle(Paint.Style.STROKE);
 		p.setColor(Color.BLUE);
 	}
 
@@ -48,8 +53,8 @@ public class graph2 extends SurfaceView implements SurfaceHolder.Callback {
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
 		drawThread = new DrawThread(getHolder());
-		drawThread.setRunning(true);
-		drawThread.start();
+		// drawThread.setRunning(false);
+		// drawThread.start();
 	}
 
 	@Override
@@ -80,6 +85,7 @@ public class graph2 extends SurfaceView implements SurfaceHolder.Callback {
 
 		@Override
 		public void run() {
+			// running = check;
 			Canvas canvas;
 			while (running) {
 				canvas = null;
@@ -103,10 +109,19 @@ public class graph2 extends SurfaceView implements SurfaceHolder.Callback {
 						canvasW += 100;
 						canvasH -= 100;
 					}
+
+					// for (int i = 0; i < mas.length; i++) {
+					// path.lineTo(mas[i], canvasW);
+					// canvasW += 50;
+					// }
+
 					side = canvasW - 50;
+
+					// canvas.drawPoint(50, 50, p);
 
 					canvas.drawPath(path, p);
 					// invalidate();
+					// requestLayout();
 					// canvas.drawColor(Color.GREEN);
 				} finally {
 					if (canvas != null) {

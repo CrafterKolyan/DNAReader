@@ -18,6 +18,8 @@ public class graphic extends View {
 
 	float side = 0;
 
+	int mas[] = null;
+
 	boolean drag = false;
 	float dragX = 0;
 	float dragY = 0;
@@ -51,11 +53,15 @@ public class graphic extends View {
 		// p.setColor(Color.WHITE);
 		//
 		// }
-		while (canvasH > 100) {
-			path.lineTo(x + canvasW, canvasHeight - canvasH);
-			path.lineTo(x + canvasW + 50, canvasHeight);
-			canvasW += 100;
-			canvasH -= 100;
+		// while (canvasH > 100) {
+		// // path.lineTo(x + canvasW, canvasHeight - canvasH);
+		// // path.lineTo(x + canvasW + 50, canvasHeight);
+		// canvasW += 100;
+		// canvasH -= 100;
+		// }
+		for (int i = 0; i < mas.length; i++) {
+			path.lineTo(mas[i], canvasW);
+			canvasW += 50;
 		}
 		side = canvasW - 50;
 

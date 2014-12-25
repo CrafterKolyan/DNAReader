@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="fill_parent"
-              android:layout_height="fill_parent"
-              android:background="#aaa">
-
-
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#aaa"
+    android:orientation="vertical" >
 
     <Button
         android:id="@+id/button1"
@@ -16,6 +14,7 @@
     <ru.project.dnareader.graph2
         android:id="@+id/mySurface"
         android:layout_width="fill_parent"
-        android:layout_height="247dp" />
+        android:layout_height="247dp"
+        android:layout_weight="0.62" />
 
 </LinearLayout>

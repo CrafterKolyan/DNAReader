@@ -1,14 +1,11 @@
 package ru.project.dnareader;
 
-import java.io.IOException;
-
-import org.biojava.bio.symbol.IllegalSymbolException;
-
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -17,7 +14,6 @@ public class MainActivity extends Activity {
 	Button btn;
 	static TextView tv1;
 	static TextView tv2;
-	final boolean DEBUG = true;
 	Context context;
 
 	@Override
@@ -27,9 +23,18 @@ public class MainActivity extends Activity {
 
 		setContentView(R.layout.main);
 
-		// tv1 = (TextView) findViewById(R.id.textView1);
+		// btn = new Button;
+		btn = (Button) findViewById(R.id.button1);
+		btn.setOnClickListener(new View.OnClickListener() {
 
-		// tv2 = (TextView) findViewById(R.id.textView2);
+			@Override
+			public void onClick(View v) {
+
+				// graph2.drawThread.setRunning(true);
+				// graph2.drawThread.start();
+
+			}
+		});
 
 	}
 
@@ -60,8 +65,7 @@ public class MainActivity extends Activity {
 		fileSelector.showDialogs();
 	}
 
-	public static void continuee(String ABIfilePath) throws IOException,
-			IllegalSymbolException {
+	public static void continuee(String ABIfilePath) {
 
 	}
 
