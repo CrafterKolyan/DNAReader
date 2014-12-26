@@ -15,6 +15,13 @@
         android:id="@+id/mySurface"
         android:layout_width="fill_parent"
         android:layout_height="247dp"
-        android:layout_weight="0.62" />
+        android:background="#aaa"
+        android:fadeScrollbars="false"
+        android:scrollX="0px"
+        android:scrollY="0px"
+        android:scrollbarAlwaysDrawVerticalTrack="true"
+        android:scrollbarSize="20dip"
+        android:scrollbarStyle="outsideOverlay"
+        android:scrollbars="horizontal" />
 
 </LinearLayout>

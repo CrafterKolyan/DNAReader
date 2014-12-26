@@ -24,6 +24,11 @@ public class graph2 extends SurfaceView implements SurfaceHolder.Callback {
 
 	float side = 0;
 
+	public static int[] traceA;
+	public static int[] traceC;
+	public static int[] traceG;
+	public static int[] traceT;
+
 	boolean drag = false;
 	float dragX = 0;
 	float dragY = 0;
@@ -38,9 +43,9 @@ public class graph2 extends SurfaceView implements SurfaceHolder.Callback {
 		path = new Path();
 
 		p = new Paint();
-		p.setStrokeWidth(30);
+		p.setStrokeWidth(3);
 		// if (check)
-		// p.setStyle(Paint.Style.STROKE);
+		p.setStyle(Paint.Style.STROKE);
 		p.setColor(Color.BLUE);
 	}
 
@@ -86,9 +91,11 @@ public class graph2 extends SurfaceView implements SurfaceHolder.Callback {
 		@Override
 		public void run() {
 			// running = check;
-			Canvas canvas;
+			Canvas canvas = null;
+
 			while (running) {
 				canvas = null;
+
 				try {
 					canvas = surfaceHolder.lockCanvas(null);
 					if (canvas == null)
@@ -96,30 +103,35 @@ public class graph2 extends SurfaceView implements SurfaceHolder.Callback {
 					canvasWidth = canvas.getWidth();
 					canvasHeight = canvas.getHeight();
 					path.reset();
-					float canvasH = canvasHeight;
-					float canvasW = 50;
-					path.moveTo(x, canvasHeight);
+					// float canvasH = canvasHeight;
+					// float canvasW = 50;
+					path.moveTo(0, canvasHeight);
+					// float qwe =
+					for (int i = 0; i < traceA.length; i++) {
+						path.lineTo(2 * i, canvasHeight - 2 * traceA[i]);
+					}
 					// if (a == null) {
 					// p.setColor(Color.WHITE);
 					//
 					// }
-					while (canvasH > 100) {
-						path.lineTo(x + canvasW, canvasHeight - canvasH);
-						path.lineTo(x + canvasW + 50, canvasHeight);
-						canvasW += 100;
-						canvasH -= 100;
-					}
+					// while (canvasH > 100) {
+					// path.lineTo(x + canvasW, canvasHeight - canvasH);
+					// path.lineTo(x + canvasW + 50, canvasHeight);
+					// canvasW += 100;
+					// canvasH -= 100;
+					// }
 
 					// for (int i = 0; i < mas.length; i++) {
 					// path.lineTo(mas[i], canvasW);
 					// canvasW += 50;
 					// }
 
-					side = canvasW - 50;
+					// side = canvasW - 50;
 
 					// canvas.drawPoint(50, 50, p);
-
+					canvas.drawColor(Color.WHITE);
 					canvas.drawPath(path, p);
+
 					// invalidate();
 					// requestLayout();
 					// canvas.drawColor(Color.GREEN);
@@ -128,6 +140,7 @@ public class graph2 extends SurfaceView implements SurfaceHolder.Callback {
 						surfaceHolder.unlockCanvasAndPost(canvas);
 					}
 				}
+
 			}
 		}
 	}

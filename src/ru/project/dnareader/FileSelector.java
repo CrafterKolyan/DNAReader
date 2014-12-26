@@ -1,12 +1,18 @@
 package ru.project.dnareader;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+
+import org.biojava.bio.program.abi.ABITrace;
+import org.biojava.bio.seq.DNATools;
+import org.biojava.bio.symbol.IllegalSymbolException;
 
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -221,7 +227,7 @@ public class FileSelector {
 			makeList(mCurrentLocation);
 		} else if (itemLocation.isFile()) {
 			Toast.makeText(mContext, itemPath, Toast.LENGTH_SHORT).show();
-			// finalItimePath = itemPath;
+			finalItimePath = itemPath;
 			// MainActivity.filePath = itemPath;
 			// File ABIfile = new File (itemPath);
 
@@ -245,11 +251,11 @@ public class FileSelector {
 			// } catch (IOException e) {
 			// e.printStackTrace();
 			// }
-			mDialog.dismiss();
-			graph2.drawThread.setRunning(true);
-			graph2.drawThread.start();
+			// mDialog.dismiss();
+			// graph2.drawThread.setRunning(true);
+			// graph2.drawThread.start();
 
-			// dismiss();
+			dismiss();
 			// graph2.drawThread.setRunning(true);
 			// graph2.drawThread.start();
 
@@ -269,9 +275,25 @@ public class FileSelector {
 		return finalItimePath;
 	}
 
-	// /** Simple wrapper around the Dialog.dissmiss() method. */
-	// public void dismiss() {
-	//
-	// mDialog.dismiss();
-	// }
+	/** Simple wrapper around the Dialog.dissmiss() method. */
+	public void dismiss() {
+		mDialog.dismiss();
+
+		Log.v("TAG", finalItimePath);
+
+		try {
+			File abifile = new File(finalItimePath);
+			ABITrace abiTrace = new ABITrace(abifile);
+			graph2.traceA = abiTrace.getTrace(DNATools.a());
+			graph2.drawThread.setRunning(true);
+			graph2.drawThread.start();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalSymbolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
 }

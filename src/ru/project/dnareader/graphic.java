@@ -20,6 +20,11 @@ public class graphic extends View {
 
 	int mas[] = null;
 
+	public static int[] traceA;
+	public static int[] traceC;
+	public static int[] traceG;
+	public static int[] traceT;
+
 	boolean drag = false;
 	float dragX = 0;
 	float dragY = 0;
