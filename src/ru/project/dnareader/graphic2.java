@@ -9,7 +9,7 @@ import android.graphics.Path;
 import android.view.MotionEvent;
 import android.view.View;
 
-public class graphic extends View {
+public class graphic2 extends View {
 
 	Path path;
 	public static Paint p;
@@ -34,7 +34,7 @@ public class graphic extends View {
 
 	public static int[] a;
 
-	graphic(Context context, int[] aa, int[] c, int[] g, int[] t) {
+	graphic2(Context context, int[] aa, int[] c, int[] g, int[] t) {
 		super(context);
 
 		path = new Path();

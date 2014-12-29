@@ -12,7 +12,6 @@ import org.biojava.bio.symbol.IllegalSymbolException;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Environment;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -279,19 +278,25 @@ public class FileSelector {
 	public void dismiss() {
 		mDialog.dismiss();
 
-		Log.v("TAG", finalItimePath);
-
 		try {
-			File abifile = new File(finalItimePath);
+			File abifile = new File(
+					"/storage/emulated/0/Download/GJA1-19-II-1-ex1_GJA1-1F_A2.ab1");
+
 			ABITrace abiTrace = new ABITrace(abifile);
-			graph2.traceA = abiTrace.getTrace(DNATools.a());
-			graph2.drawThread.setRunning(true);
-			graph2.drawThread.start();
+			Graphic.secA.trace(abiTrace.getTrace(DNATools.a()));
+			Graphic.secC.trace(abiTrace.getTrace(DNATools.c()));
+			Graphic.secG.trace(abiTrace.getTrace(DNATools.g()));
+			Graphic.secT.trace(abiTrace.getTrace(DNATools.t()));
+
+			MainActivity.tv1.setText("множитель 5");
+
+			Graphic.drawThread.setRunning(true);
+
+			Graphic.drawThread.start();
+
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IllegalSymbolException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

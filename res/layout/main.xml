@@ -1,9 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#aaa"
-    android:orientation="vertical" >
+    android:columnCount="1" >
 
     <Button
         android:id="@+id/button1"
@@ -11,17 +9,23 @@
         android:layout_height="wrap_content"
         android:text="Button" />
 
-    <ru.project.dnareader.graph2
-        android:id="@+id/mySurface"
-        android:layout_width="fill_parent"
-        android:layout_height="247dp"
-        android:background="#aaa"
-        android:fadeScrollbars="false"
-        android:scrollX="0px"
-        android:scrollY="0px"
-        android:scrollbarAlwaysDrawVerticalTrack="true"
-        android:scrollbarSize="20dip"
-        android:scrollbarStyle="outsideOverlay"
-        android:scrollbars="horizontal" />
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="226dp"
+        android:layout_height="34dp"
+        android:layout_column="0"
+        android:layout_gravity="right|center_vertical"
+        android:layout_row="0"
+        android:text="TextView" />
+
+
+            
+            <ru.project.dnareader.Graphic
+                android:id="@+id/mySurface"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#aaa" />
+
+
+</GridLayout>

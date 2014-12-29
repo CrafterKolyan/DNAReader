@@ -21,6 +21,7 @@ public class MainActivity extends Activity {
 	Button btn;
 	static TextView tv1;
 	static TextView tv2;
+	boolean status = false;
 	Context context;
 
 	@Override
@@ -29,6 +30,8 @@ public class MainActivity extends Activity {
 		// setContentView(new graphic(this, null, null, null, null));
 
 		setContentView(R.layout.main);
+
+		tv1 = (TextView) findViewById(R.id.textView1);
 
 		// btn = new Button;
 		btn = (Button) findViewById(R.id.button1);
@@ -39,24 +42,32 @@ public class MainActivity extends Activity {
 
 				// graph2.drawThread.setRunning(true);
 				// graph2.drawThread.start();
-
+				btn.setClickable(false);
 				try {
 					File abifile = new File(
 							"/storage/emulated/0/Download/GJA1-19-II-1-ex1_GJA1-1F_A2.ab1");
+
 					ABITrace abiTrace = new ABITrace(abifile);
-					graph2.traceA = abiTrace.getTrace(DNATools.a());
-					graph2.drawThread.setRunning(true);
-					graph2.drawThread.start();
+					Graphic.secA.trace(abiTrace.getTrace(DNATools.a()));
+					Graphic.secC.trace(abiTrace.getTrace(DNATools.c()));
+					Graphic.secG.trace(abiTrace.getTrace(DNATools.g()));
+					Graphic.secT.trace(abiTrace.getTrace(DNATools.t()));
+
+					tv1.setText("множитель 5");
+
+					Graphic.drawThread.setRunning(true);
+
+					Graphic.drawThread.start();
+
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (IllegalSymbolException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 
 			}
 		});
+		// btn.performClick();
 
 	}
 
@@ -89,6 +100,13 @@ public class MainActivity extends Activity {
 
 	public static void continuee(String ABIfilePath) {
 
+	}
+
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+
+		super.onDestroy();
 	}
 
 }
