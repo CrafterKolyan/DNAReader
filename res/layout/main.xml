@@ -9,23 +9,29 @@
         android:layout_height="wrap_content"
         android:text="Button" />
 
-
     <TextView
         android:id="@+id/textView1"
         android:layout_width="226dp"
-        android:layout_height="34dp"
+        android:layout_height="wrap_content"
         android:layout_column="0"
-        android:layout_gravity="right|center_vertical"
+        android:layout_gravity="right|top"
         android:layout_row="0"
         android:text="TextView" />
-
-
             
-            <ru.project.dnareader.Graphic
-                android:id="@+id/mySurface"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#aaa" />
+        <ru.project.dnareader.Graphic
+            android:id="@+id/mySurface"
+            android:layout_width="match_parent"
+            android:layout_height="390dp"
+            android:layout_gravity="fill_vertical"
+            android:layout_margin="10dp"
+            android:background="#FFFFFF" />
 
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="187dp"
+            android:layout_column="0"
+            android:layout_gravity="center"
+            android:layout_row="0"
+            android:text="TextView" />
 
 </GridLayout>

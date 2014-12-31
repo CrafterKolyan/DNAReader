@@ -9,7 +9,7 @@ import android.graphics.Path;
 
 public class Sequence {
 	public int[] trace = null;
-	public int[] avtrace = null; // average trace
+	// public int[] avtrace = null; // average trace
 	public int color = 0;
 	public Paint paint = new Paint();
 	public int max = 0;
@@ -33,14 +33,14 @@ public class Sequence {
 		}
 		// Log.v("TAG", "color" + color);
 
-		paint.setStrokeWidth(10);
+		paint.setStrokeWidth(4);
 		paint.setStyle(Paint.Style.STROKE);
 
 	}
 
 	public void trace(int[] trace) {
 		this.trace = trace;
-		avtrace();
+		// avtrace();
 		max();
 	}
 
@@ -50,13 +50,14 @@ public class Sequence {
 				max = trace[i];
 	}
 
-	private void avtrace() {
-		avtrace = new int[trace.length - 2];
-		for (int i = 0; i < avtrace.length; i++) {
-			if (i >= avtrace.length)
-				break;
-			avtrace[i] = (trace[i] + trace[i + 1] + trace[i + 2]) / 3;
-
-		}
-	}
+	// private void avtrace() {
+	// avtrace = trace;
+	// avtrace = new int[trace.length - 2];
+	// for (int i = 0; i < avtrace.length; i++) {
+	// if (i >= avtrace.length)
+	// break;
+	// avtrace[i] = (trace[i] + trace[i + 1] + trace[i + 2]) / 3;
+	//
+	// }
+	// }
 }

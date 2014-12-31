@@ -1,7 +1,5 @@
 package ru.project.dnareader;
 
-import java.util.concurrent.TimeUnit;
-
 import org.biojava.bio.seq.DNATools;
 import org.biojava.bio.symbol.AtomicSymbol;
 
@@ -11,6 +9,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Path;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -32,11 +31,11 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 	// Path path2;
 	// public static Paint p2;
 
-	float x = 10;
+	float graphstart = 10;
 
 	// public static int mas[] = null;
 
-	float side = 0;
+	float graphWidth = 0;
 
 	// public static int[] traceA = null;
 	// public static int[] traceC = null;
@@ -55,12 +54,27 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 
 	static Canvas canvas = null;
 
+	boolean checkHeightRate = true;
+
 	boolean drag = false;
+	boolean swype = false;
+
 	float dragX = 0;
 	float dragY = 0;
 
 	static float maxHeigt = 0;
-	static float heightRate = 0;
+
+	static float graphHeightRate = 0;
+	static float graphWidthRate = 10;
+
+	static float realhHeightRate = 0;
+	static float realhWidthRate = 10;
+
+	static float realhHeightRate2 = 0;
+	static float realhWidthRate2 = 10;
+
+	float diffrentX = 0;
+	float diffrentY = 0;
 
 	float canvasWidth = 0;
 	float canvasHeight = 0;
@@ -122,11 +136,11 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 
 			Path path = new Path();
 			path.reset();
-			path.moveTo(x, canvasHeight - trace[0] * heightRate);
+			path.moveTo(graphstart, canvasHeight - trace[0] * realhHeightRate);
 
 			for (int i = 1; i < trace.length; i += 5) {
-				path.lineTo(x + i * 4, canvasHeight - trace[i] * heightRate);
-				// Log.v("TAG", " " + i);
+				path.lineTo(graphstart + i * realhWidthRate, canvasHeight
+						- trace[i] * realhHeightRate);
 			}
 			if (base == DNATools.a()) {
 				secA.path = path;
@@ -142,12 +156,7 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 
 		@Override
 		public void run() {
-			// running = check;
-			// Canvas canvas = null;
-			maxHeigt = Math.max(Math.max(secA.max, secC.max),
-					Math.max(secG.max, secT.max));
-
-			side = secA.trace.length;
+			graphWidth = secA.trace.length;
 
 			while (running) {
 				canvas = null;
@@ -155,12 +164,26 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 				try {
 					canvas = surfaceHolder.lockCanvas(null);
 
-					graphicWidth = secA.trace.length / 3;
+					graphicWidth = secA.trace.length * realhWidthRate;
+					//
+					//
+					//
+					//
+					//
+					//
 
-					heightRate = (float) (canvas.getHeight()) / maxHeigt;
-					heightRate++;
+					if (checkHeightRate) {
+						maxHeigt = Math.max(Math.max(secA.max, secC.max),
+								Math.max(secG.max, secT.max));
+						graphHeightRate = (float) (canvas.getHeight())
+								/ maxHeigt;
+						graphHeightRate++;
+						checkHeightRate = false;
+						realhHeightRate = graphHeightRate;
+						realhHeightRate2 = graphHeightRate;
+					}
 
-					if (canvas == null || heightRate == 0)
+					if (canvas == null || graphHeightRate == 0)
 						continue;
 
 					canvas.drawColor(Color.WHITE);
@@ -168,14 +191,14 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 					canvasWidth = canvas.getWidth();
 					canvasHeight = canvas.getHeight() - 150;
 
-					drawingGraph(secA.avtrace, DNATools.a());
-					drawingGraph(secC.avtrace, DNATools.c());
-					drawingGraph(secG.avtrace, DNATools.g());
-					drawingGraph(secT.avtrace, DNATools.t());
+					// drawingGraph(secA.trace, DNATools.a());
+					// drawingGraph(secC.trace, DNATools.c());
+					// drawingGraph(secG.trace, DNATools.g());
+					drawingGraph(secT.trace, DNATools.t());
 
-					canvas.drawPath(secA.path, secA.paint);
-					canvas.drawPath(secC.path, secC.paint);
-					canvas.drawPath(secG.path, secG.paint);
+					// canvas.drawPath(secA.path, secA.paint);
+					// canvas.drawPath(secC.path, secC.paint);
+					// canvas.drawPath(secG.path, secG.paint);
 					canvas.drawPath(secT.path, secT.paint);
 				} finally {
 					if (canvas != null) {
@@ -187,49 +210,138 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 		}
 	}
 
+	// @SuppressLint("ClickableViewAccessibility")
+	// public boolean onTouchEvent(MotionEvent event) {
+	// float evX = event.getX();
+	//
+	// switch (event.getAction()) {
+	//
+	// case MotionEvent.ACTION_DOWN:
+	// drag = true;
+	// dragX = evX - x;
+	// break;
+	// case MotionEvent.ACTION_MOVE:
+	// if (drag) {
+	// try {
+	// TimeUnit.MILLISECONDS.sleep(100);
+	// } catch (InterruptedException e) {
+	// // TODO Auto-generated catch block
+	// e.printStackTrace();
+	// }
+	// x = (evX - dragX);
+	// MainActivity.tv1.setText(" " + x);
+	// if (x > 100) {
+	// x = 99;
+	// dragX = evX - x;
+	// invalidate();
+	// break;
+	// } else if ((x + graphWidth) < (canvasWidth - 100)) {
+	// x = canvasWidth - 100 - graphWidth + 1;
+	// invalidate();
+	// break;
+	// }
+	//
+	// }
+	// break;
+	//
+	// case MotionEvent.ACTION_UP:
+	// // if (x < 100 && x > 0)
+	// // x = 0;
+	// // else if ((x +graphWidth) > 980 && (x +graphWidth) < canvasWidth)
+	// // x = -graphWidth+ canvasWidth;
+	// // drag = false;
+	// break;
+	// }
+	//
+	// return true;
+	// }
+
 	@SuppressLint("ClickableViewAccessibility")
+	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		float evX = event.getX();
 
-		switch (event.getAction()) {
+		float evX1 = 0;
+		int actionMask = event.getActionMasked();
+		int pointerCount = event.getPointerCount();
 
+		switch (actionMask) {
 		case MotionEvent.ACTION_DOWN:
 			drag = true;
-			dragX = evX - x;
+			evX1 = event.getX(0);
+			dragX = evX1 - graphstart;
 			break;
+
+		case MotionEvent.ACTION_POINTER_DOWN:
+			Log.v("TAG", "ACTION_POINTER_DOWN");
+			swype = true;
+			drag = false;
+			diffrentX = Math.abs(event.getX(0) - event.getX(1));
+			diffrentY = Math.abs(event.getY(0) - event.getY(1));
+			break;
+
+		case MotionEvent.ACTION_UP:
+			if (graphstart < 100 && graphstart > 0)
+				graphstart = 0;
+			else if ((graphstart + graphWidth) > 980
+					&& (graphstart + graphWidth) < canvasWidth)
+				graphstart = -graphWidth + canvasWidth;
+			drag = false;
+			break;
+
+		case MotionEvent.ACTION_POINTER_UP:
+			if (pointerCount == 2) {
+				realhHeightRate2 = realhHeightRate;
+				realhWidthRate2 = realhWidthRate;
+				swype = false;
+				drag = true;
+			}
+			break;
+
 		case MotionEvent.ACTION_MOVE:
+			MainActivity.tv1.setText(" " + graphicWidth);
+			MainActivity.tv2.setText(" " + canvasWidth);
+
 			if (drag) {
-				try {
-					TimeUnit.MILLISECONDS.sleep(100);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				x = (evX - dragX);
-				MainActivity.tv1.setText(" " + x);
-				if (x > 100) {
-					x = 99;
-					dragX = evX - x;
+				evX1 = event.getX(0);
+				graphstart = (evX1 - dragX);
+				// MainActivity.tv1.setText(" " + graphstart);
+				if (graphstart > 100) {
+					graphstart = 99;
+					dragX = evX1 - graphstart;
 					invalidate();
 					break;
-				} else if ((x + side) < (canvasWidth - 100)) {
-					x = canvasWidth - 100 - side + 1;
+				} else if (((graphstart + graphWidth) < (canvasWidth - 100))) {
+					graphstart = canvasWidth - 100 - graphWidth + 1;
 					invalidate();
 					break;
 				}
 
 			}
-			break;
+			if (swype) {
 
-		case MotionEvent.ACTION_UP:
-			// if (x < 100 && x > 0)
-			// x = 0;
-			// else if ((x + side) > 980 && (x + side) < canvasWidth)
-			// x = -side + canvasWidth;
-			// drag = false;
+				// try {
+				// TimeUnit.MILLISECONDS.sleep(100);
+				// } catch (InterruptedException e) {
+				// e.printStackTrace();
+				// }
+
+				float realDiffrentX = Math.abs(event.getX(0) - event.getX(1))
+						/ (diffrentX);
+				float realDiffrentY = Math.abs(event.getY(0) - event.getY(1))
+						/ (diffrentY);
+				Log.v("TAG", "realDiffrentX / realDiffrentY "
+						+ (realDiffrentX / realDiffrentY));
+
+				if (Math.abs(event.getX(0) - event.getX(1))
+						/ Math.abs(event.getY(0) - event.getY(1)) > 1)
+					realhWidthRate = realhWidthRate2 * realDiffrentX;
+				else
+					realhHeightRate = realhHeightRate2 * realDiffrentY;
+				break;
+			}
+
 			break;
 		}
-
 		return true;
 	}
 }
