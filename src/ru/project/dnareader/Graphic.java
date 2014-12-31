@@ -9,11 +9,11 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Path;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.TextView;
+//import android.util.Log;
 
 //import android.util.Log;
 
@@ -311,8 +311,8 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 				else
 					realhHeightRate = realhHeightRate2 * realDiffrentY;
 
-				Log.v("TAG", "staticDist " + staticDist);
-				Log.v("TAG", "    graphstart " + graphstart);
+				// Log.v("TAG", "staticDist " + staticDist);
+				// Log.v("TAG", "    graphstart " + graphstart);
 
 				// graphstart = staticDist * realhWidthRate;
 
