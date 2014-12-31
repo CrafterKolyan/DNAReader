@@ -15,6 +15,8 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.TextView;
 
+//import android.util.Log;
+
 public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 
 	static DrawThread drawThread;
@@ -31,11 +33,20 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 	// Path path2;
 	// public static Paint p2;
 
+	float staticX = 0;
+	float staticDist = 0;
+
 	float graphstart = 10;
 
 	// public static int mas[] = null;
 
 	float graphWidth = 0;
+
+	long prevTime = 9999;
+	long maxTime = 600;
+	float maxDistant = 100;
+	float prevTouchY = 99999;
+	float prevTouchX = 9999;
 
 	// public static int[] traceA = null;
 	// public static int[] traceC = null;
@@ -64,13 +75,13 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 
 	static float maxHeigt = 0;
 
-	static float graphHeightRate = 0;
-	static float graphWidthRate = 10;
+	static float graphHeightRate = 1;
+	// static float graphWidthRate = 10;
 
-	static float realhHeightRate = 0;
+	static float realhHeightRate = 1;
 	static float realhWidthRate = 10;
 
-	static float realhHeightRate2 = 0;
+	static float realhHeightRate2 = 1;
 	static float realhWidthRate2 = 10;
 
 	float diffrentX = 0;
@@ -78,8 +89,6 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 
 	float canvasWidth = 0;
 	float canvasHeight = 0;
-
-	float graphicWidth = 0;
 
 	public Graphic(Context context, AttributeSet attrs) {
 		super(context);
@@ -138,9 +147,22 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 			path.reset();
 			path.moveTo(graphstart, canvasHeight - trace[0] * realhHeightRate);
 
-			for (int i = 1; i < trace.length; i += 5) {
-				path.lineTo(graphstart + i * realhWidthRate, canvasHeight
-						- trace[i] * realhHeightRate);
+			int beggining = 0;
+			int ending = 0;
+
+			beggining = Math.abs((int) (graphstart / realhWidthRate));
+			ending = beggining + (int) (canvasWidth / realhWidthRate) + 3;
+			if (ending > trace.length)
+				ending = trace.length;
+
+			// Log.v("TAG", "beggining " + beggining + "\nending" + ending);
+
+			for (int i = beggining; i < ending; i += 1) {
+				if ((canvasHeight - trace[i] * realhHeightRate) < 20)
+					path.lineTo(graphstart + i * realhWidthRate, 20);
+				else
+					path.lineTo(graphstart + i * realhWidthRate, canvasHeight
+							- trace[i] * realhHeightRate);
 			}
 			if (base == DNATools.a()) {
 				secA.path = path;
@@ -156,7 +178,6 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 
 		@Override
 		public void run() {
-			graphWidth = secA.trace.length;
 
 			while (running) {
 				canvas = null;
@@ -164,19 +185,12 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 				try {
 					canvas = surfaceHolder.lockCanvas(null);
 
-					graphicWidth = secA.trace.length * realhWidthRate;
-					//
-					//
-					//
-					//
-					//
-					//
+					graphWidth = secA.trace.length * realhWidthRate;
 
 					if (checkHeightRate) {
 						maxHeigt = Math.max(Math.max(secA.max, secC.max),
 								Math.max(secG.max, secT.max));
-						graphHeightRate = (float) (canvas.getHeight())
-								/ maxHeigt;
+						graphHeightRate = (canvasHeight - 200) / maxHeigt;
 						graphHeightRate++;
 						checkHeightRate = false;
 						realhHeightRate = graphHeightRate;
@@ -189,16 +203,16 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 					canvas.drawColor(Color.WHITE);
 
 					canvasWidth = canvas.getWidth();
-					canvasHeight = canvas.getHeight() - 150;
+					canvasHeight = canvas.getHeight() - 10;
 
-					// drawingGraph(secA.trace, DNATools.a());
-					// drawingGraph(secC.trace, DNATools.c());
-					// drawingGraph(secG.trace, DNATools.g());
+					drawingGraph(secA.trace, DNATools.a());
+					drawingGraph(secC.trace, DNATools.c());
+					drawingGraph(secG.trace, DNATools.g());
 					drawingGraph(secT.trace, DNATools.t());
 
-					// canvas.drawPath(secA.path, secA.paint);
-					// canvas.drawPath(secC.path, secC.paint);
-					// canvas.drawPath(secG.path, secG.paint);
+					canvas.drawPath(secA.path, secA.paint);
+					canvas.drawPath(secC.path, secC.paint);
+					canvas.drawPath(secG.path, secG.paint);
 					canvas.drawPath(secT.path, secT.paint);
 				} finally {
 					if (canvas != null) {
@@ -209,52 +223,6 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 			}
 		}
 	}
-
-	// @SuppressLint("ClickableViewAccessibility")
-	// public boolean onTouchEvent(MotionEvent event) {
-	// float evX = event.getX();
-	//
-	// switch (event.getAction()) {
-	//
-	// case MotionEvent.ACTION_DOWN:
-	// drag = true;
-	// dragX = evX - x;
-	// break;
-	// case MotionEvent.ACTION_MOVE:
-	// if (drag) {
-	// try {
-	// TimeUnit.MILLISECONDS.sleep(100);
-	// } catch (InterruptedException e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// }
-	// x = (evX - dragX);
-	// MainActivity.tv1.setText(" " + x);
-	// if (x > 100) {
-	// x = 99;
-	// dragX = evX - x;
-	// invalidate();
-	// break;
-	// } else if ((x + graphWidth) < (canvasWidth - 100)) {
-	// x = canvasWidth - 100 - graphWidth + 1;
-	// invalidate();
-	// break;
-	// }
-	//
-	// }
-	// break;
-	//
-	// case MotionEvent.ACTION_UP:
-	// // if (x < 100 && x > 0)
-	// // x = 0;
-	// // else if ((x +graphWidth) > 980 && (x +graphWidth) < canvasWidth)
-	// // x = -graphWidth+ canvasWidth;
-	// // drag = false;
-	// break;
-	// }
-	//
-	// return true;
-	// }
 
 	@SuppressLint("ClickableViewAccessibility")
 	@Override
@@ -269,14 +237,19 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 			drag = true;
 			evX1 = event.getX(0);
 			dragX = evX1 - graphstart;
+			doubleClick(event);
 			break;
 
 		case MotionEvent.ACTION_POINTER_DOWN:
-			Log.v("TAG", "ACTION_POINTER_DOWN");
-			swype = true;
-			drag = false;
-			diffrentX = Math.abs(event.getX(0) - event.getX(1));
-			diffrentY = Math.abs(event.getY(0) - event.getY(1));
+			// Log.v("TAG", "ACTION_POINTER_DOWN");
+			if (pointerCount == 2) {
+				swype = true;
+				drag = false;
+				diffrentX = Math.abs(event.getX(0) - event.getX(1));
+				diffrentY = Math.abs(event.getY(0) - event.getY(1)) + 3;
+				// staticX = (event.getX(0) + event.getX(1)) / 2;
+				// staticDist = (-staticX + (graphstart / realhWidthRate));
+			}
 			break;
 
 		case MotionEvent.ACTION_UP:
@@ -298,7 +271,7 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 			break;
 
 		case MotionEvent.ACTION_MOVE:
-			MainActivity.tv1.setText(" " + graphicWidth);
+			MainActivity.tv1.setText(" " + graphWidth);
 			MainActivity.tv2.setText(" " + canvasWidth);
 
 			if (drag) {
@@ -329,19 +302,44 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 						/ (diffrentX);
 				float realDiffrentY = Math.abs(event.getY(0) - event.getY(1))
 						/ (diffrentY);
-				Log.v("TAG", "realDiffrentX / realDiffrentY "
-						+ (realDiffrentX / realDiffrentY));
+				// Log.v("TAG", "realDiffrentX / realDiffrentY "
+				// + (realDiffrentX / realDiffrentY));
 
 				if (Math.abs(event.getX(0) - event.getX(1))
 						/ Math.abs(event.getY(0) - event.getY(1)) > 1)
 					realhWidthRate = realhWidthRate2 * realDiffrentX;
 				else
 					realhHeightRate = realhHeightRate2 * realDiffrentY;
+
+				Log.v("TAG", "staticDist " + staticDist);
+				Log.v("TAG", "    graphstart " + graphstart);
+
+				// graphstart = staticDist * realhWidthRate;
+
+				invalidate();
 				break;
 			}
 
 			break;
 		}
 		return true;
+	}
+
+	private void doubleClick(MotionEvent event) {
+		boolean time = (System.currentTimeMillis() - prevTime) < maxTime;
+		boolean distant = ((event.getX() - prevTouchX) < maxDistant)
+				&& ((event.getY() - prevTouchY) < maxDistant);
+
+		if (time && distant) {
+			realhHeightRate = graphHeightRate;
+			realhHeightRate2 = graphHeightRate;
+			realhWidthRate = 10;
+			realhWidthRate2 = 10;
+		}
+
+		prevTime = System.currentTimeMillis();
+		prevTouchX = event.getX();
+		prevTouchY = event.getY();
+
 	}
 }

@@ -1,7 +1,8 @@
 <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:columnCount="1" >
+    android:columnCount="1" 
+    android:background="#FFFFFF">
 
     <Button
         android:id="@+id/button1"
@@ -21,7 +22,7 @@
         <ru.project.dnareader.Graphic
             android:id="@+id/mySurface"
             android:layout_width="match_parent"
-            android:layout_height="390dp"
+            android:layout_height="405dp"
             android:layout_gravity="fill_vertical"
             android:layout_margin="10dp"
             android:background="#FFFFFF" />
