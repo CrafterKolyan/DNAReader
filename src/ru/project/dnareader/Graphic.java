@@ -9,6 +9,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Path;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -36,7 +37,7 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 	float staticX = 0;
 	float staticDist = 0;
 
-	float graphstart = 10;
+	static float graphstart = 0;
 
 	// public static int mas[] = null;
 
@@ -65,7 +66,7 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 
 	static Canvas canvas = null;
 
-	boolean checkHeightRate = true;
+	static boolean checkHeightRate = true;
 
 	boolean drag = false;
 	boolean swype = false;
@@ -188,10 +189,12 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 					graphWidth = secA.trace.length * realhWidthRate;
 
 					if (checkHeightRate) {
+						canvasWidth = canvas.getWidth();
+						canvasHeight = canvas.getHeight() - 10;
 						maxHeigt = Math.max(Math.max(secA.max, secC.max),
 								Math.max(secG.max, secT.max));
-						graphHeightRate = (canvasHeight - 200) / maxHeigt;
-						graphHeightRate++;
+						graphHeightRate = (canvasHeight - 40) / maxHeigt;
+						// graphHeightRate++;
 						checkHeightRate = false;
 						realhHeightRate = graphHeightRate;
 						realhHeightRate2 = graphHeightRate;
@@ -201,9 +204,6 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 						continue;
 
 					canvas.drawColor(Color.WHITE);
-
-					canvasWidth = canvas.getWidth();
-					canvasHeight = canvas.getHeight() - 10;
 
 					drawingGraph(secA.trace, DNATools.a());
 					drawingGraph(secC.trace, DNATools.c());
@@ -247,8 +247,8 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 				drag = false;
 				diffrentX = Math.abs(event.getX(0) - event.getX(1));
 				diffrentY = Math.abs(event.getY(0) - event.getY(1)) + 3;
-				// staticX = (event.getX(0) + event.getX(1)) / 2;
-				// staticDist = (-staticX + (graphstart / realhWidthRate));
+				staticX = (event.getX(0) + event.getX(1)) / 2;
+				staticDist = (Math.abs((graphstart - staticX) / realhWidthRate));
 			}
 			break;
 
@@ -266,7 +266,7 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 				realhHeightRate2 = realhHeightRate;
 				realhWidthRate2 = realhWidthRate;
 				swype = false;
-				drag = true;
+				drag = false;
 			}
 			break;
 
@@ -311,12 +311,19 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 				else
 					realhHeightRate = realhHeightRate2 * realDiffrentY;
 
-				// Log.v("TAG", "staticDist " + staticDist);
-				// Log.v("TAG", "    graphstart " + graphstart);
+				// try {
+				// TimeUnit.MILLISECONDS.sleep(500);
+				// } catch (InterruptedException e) {
+				// e.printStackTrace();
+				// }
 
-				// graphstart = staticDist * realhWidthRate;
+				Log.v("TAG", "staticDist " + staticDist);
+				Log.v("TAG", "    realhWidthRate " + realhWidthRate);
 
-				invalidate();
+				graphstart = staticX - staticDist * realhWidthRate;
+				Log.v("TAG", "        graphstart " + graphstart);
+
+				// invalidate();
 				break;
 			}
 
