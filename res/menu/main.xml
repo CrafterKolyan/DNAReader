@@ -7,10 +7,17 @@
     android:icon="@drawable/dts"
     android:showAsAction="always">
     <menu>
+        
         <item
             android:id="@+id/loadFile"
             android:showAsAction="always"
             android:title="Загрузить файл"/>
+        
+        <item
+            android:id="@+id/exit"
+            android:showAsAction="always"
+            android:title="Выход"/>
+        
     </menu>
 </item>
 

@@ -16,8 +16,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-//import android.widget.Button;
-
 public class MainActivity extends Activity {
 
 	Button btn;
@@ -26,26 +24,26 @@ public class MainActivity extends Activity {
 	static TextView tv2;
 	boolean status = false;
 	Context context;
+	boolean qwe = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		// setContentView(new graphic(this, null, null, null, null));
 
 		setContentView(R.layout.main);
 
 		tv1 = (TextView) findViewById(R.id.textView1);
 		tv2 = (TextView) findViewById(R.id.textView2);
-
-		// btn = new Button;
 		btn = (Button) findViewById(R.id.button1);
 		btn.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				// btn.setClickable(false);
-				boolean qwe = Graphic.drawThread.isAlive();
 				if (!qwe) {
+
+					Graphic.checkHeightRate = true;
+					qwe = true;
+
 					try {
 						File abifile = new File(
 								"/storage/emulated/0/Download/GJA1-19-II-1-ex1_GJA1-1F_A2.ab1");
@@ -56,9 +54,7 @@ public class MainActivity extends Activity {
 						Graphic.secG.trace(abiTrace.getTrace(DNATools.g()));
 						Graphic.secT.trace(abiTrace.getTrace(DNATools.t()));
 
-						Graphic.drawThread.setRunning(true);
-
-						Graphic.drawThread.start();
+						Graphic.isDrawing = true;
 
 					} catch (IOException e) {
 						e.printStackTrace();
@@ -67,6 +63,9 @@ public class MainActivity extends Activity {
 					}
 
 				} else {
+
+					Graphic.checkHeightRate = true;
+					qwe = false;
 
 					try {
 						File abifile = new File(
@@ -81,7 +80,9 @@ public class MainActivity extends Activity {
 						// Graphic.drawThread.setRunning(true);
 
 						// Graphic.drawThread.start();
-						Graphic.checkHeightRate = false;
+						Graphic.isDrawing = true;
+
+						// Graphic.checkHeightRate = false;
 
 					} catch (IOException e) {
 						e.printStackTrace();
@@ -99,20 +100,8 @@ public class MainActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				Graphic.graphstart = 0;
-				// boolean retry = true;
-				// Graphic.drawThread.setRunning(false);
-				//
-				// while (retry) {
-				// try {
-				// Graphic.drawThread.join();
-				// retry = false;
-				// } catch (InterruptedException e) {
-				// }
-				// }
-				// Graphic.drawThread.interrupt();
 			}
 		});
-		// btn.performClick();
 
 	}
 
@@ -122,6 +111,8 @@ public class MainActivity extends Activity {
 		switch (item.getItemId()) {
 		case R.id.loadFile:
 			showFileSelector();
+		case R.id.exit:
+			onDestroy();
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -149,9 +140,7 @@ public class MainActivity extends Activity {
 
 	@Override
 	protected void onDestroy() {
-		// TODO Auto-generated method stub
-
+		// Graphic.onDestroy();
 		super.onDestroy();
 	}
-
 }
