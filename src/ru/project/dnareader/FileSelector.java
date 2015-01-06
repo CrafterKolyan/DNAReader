@@ -227,37 +227,7 @@ public class FileSelector {
 		} else if (itemLocation.isFile()) {
 			Toast.makeText(mContext, itemPath, Toast.LENGTH_SHORT).show();
 			finalItimePath = itemPath;
-			// MainActivity.filePath = itemPath;
-			// File ABIfile = new File (itemPath);
-
-			// graphic a = new graphic(mContext, );
-
-			// File ABIfile = new File(itemPath);
-			// ABITrace ABITrace;
-			// try {
-			// // MainActivity.oncreat();
-			// ABITrace = new ABITrace(ABIfile);
-			// // graphic.a = ABITrace.getTrace(DNATools.a());
-			//
-			// final graphic a = new graphic(mContext,
-			// ABITrace.getTrace(DNATools.a()),
-			// ABITrace.getTrace(DNATools.c()),
-			// ABITrace.getTrace(DNATools.g()),
-			// ABITrace.getTrace(DNATools.t()));
-			// graphic.p.setColor(Color.GREEN);
-			// } catch (IllegalSymbolException e) {
-			// e.printStackTrace();
-			// } catch (IOException e) {
-			// e.printStackTrace();
-			// }
-			// mDialog.dismiss();
-			// graph2.drawThread.setRunning(true);
-			// graph2.drawThread.start();
-
 			dismiss();
-			// graph2.drawThread.setRunning(true);
-			// graph2.drawThread.start();
-
 		}
 	}
 
@@ -278,9 +248,11 @@ public class FileSelector {
 	public void dismiss() {
 		mDialog.dismiss();
 
+		Graphic.checkHeightRate = true;
+		// Graphic.isAlloweed = true;
+
 		try {
-			File abifile = new File(
-					"/storage/emulated/0/Download/GJA1-19-II-1-ex1_GJA1-1F_A2.ab1");
+			File abifile = new File(finalItimePath);
 
 			ABITrace abiTrace = new ABITrace(abifile);
 			Graphic.secA.trace(abiTrace.getTrace(DNATools.a()));
@@ -288,11 +260,7 @@ public class FileSelector {
 			Graphic.secG.trace(abiTrace.getTrace(DNATools.g()));
 			Graphic.secT.trace(abiTrace.getTrace(DNATools.t()));
 
-			MainActivity.tv1.setText("множитель 5");
-
-			Graphic.drawThread.setRunning(true);
-
-			Graphic.drawThread.start();
+			Graphic.isDrawing = true;
 
 		} catch (IOException e) {
 			e.printStackTrace();

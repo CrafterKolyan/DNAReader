@@ -10,6 +10,7 @@ import org.biojava.bio.symbol.IllegalSymbolException;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -43,6 +44,7 @@ public class MainActivity extends Activity {
 
 					Graphic.checkHeightRate = true;
 					qwe = true;
+					// Graphic.isAlloweed = true;
 
 					try {
 						File abifile = new File(
@@ -66,6 +68,7 @@ public class MainActivity extends Activity {
 
 					Graphic.checkHeightRate = true;
 					qwe = false;
+					// Graphic.isAlloweed = true;
 
 					try {
 						File abifile = new File(
@@ -139,7 +142,25 @@ public class MainActivity extends Activity {
 	}
 
 	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		Log.v("TAG", "MainActivity onPause");
+		// Graphic.isAlloweed = false;
+		super.onPause();
+	}
+
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		Log.v("TAG", "MainActivity onResume");
+
+		// Graphic.isAlloweed = true;
+		super.onResume();
+	}
+
+	@Override
 	protected void onDestroy() {
+		Log.v("TAG", "MainActivity onDestroy");
 		// Graphic.onDestroy();
 		super.onDestroy();
 	}

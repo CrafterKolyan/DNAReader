@@ -13,11 +13,12 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.TextView;
-//import android.util.Log;
 
 public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 
 	static DrawThread drawThread;
+
+	// static public boolean isAlloweed = false;
 
 	TextView tv;
 
@@ -195,6 +196,7 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 
 			}
 		}
+
 	}
 
 	@SuppressLint("ClickableViewAccessibility")
@@ -312,4 +314,5 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 	// drawThread.interrupt();
 	// }
 	// }
+
 }
