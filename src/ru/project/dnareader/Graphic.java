@@ -33,7 +33,7 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 	long maxTime = 600;
 	float maxDistant = 100;
 	float prevTouchY = 99999;
-	float prevTouchX = 9999;
+	float prevTouchX = 99999;
 
 	static boolean isDrawing = false;
 
@@ -155,13 +155,18 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 		@Override
 		public void run() {
 
-			while (running) {
+			while (!drawThread.isInterrupted()) {
+
 				canvas = null;
 
 				try {
 					canvas = surfaceHolder.lockCanvas(null);
 
+					if (canvas == null || graphHeightRate == 0)
+						break;
+
 					canvas.drawColor(Color.WHITE);
+
 					if (isDrawing) {
 						graphWidth = secA.trace.length * realhWidthRate;
 						if (checkHeightRate) {
@@ -174,9 +179,6 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 							realhHeightRate = graphHeightRate;
 							realhHeightRate2 = graphHeightRate;
 						}
-
-						if (canvas == null || graphHeightRate == 0)
-							continue;
 
 						drawingGraph(secA.trace, DNATools.a());
 						drawingGraph(secC.trace, DNATools.c());
@@ -308,11 +310,5 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 		prevTouchY = event.getY();
 
 	}
-
-	// public static void onDestroy() {
-	// while (!drawThread.isInterrupted()) {
-	// drawThread.interrupt();
-	// }
-	// }
 
 }

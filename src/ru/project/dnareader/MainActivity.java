@@ -99,7 +99,6 @@ public class MainActivity extends Activity {
 		btn1 = (Button) findViewById(R.id.button123);
 		btn1.setOnClickListener(new View.OnClickListener() {
 
-			// @SuppressWarnings("deprecation")
 			@Override
 			public void onClick(View v) {
 				Graphic.graphstart = 0;
