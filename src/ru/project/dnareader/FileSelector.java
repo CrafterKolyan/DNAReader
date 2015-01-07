@@ -12,6 +12,7 @@ import org.biojava.bio.symbol.IllegalSymbolException;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -36,6 +37,8 @@ public class FileSelector {
 	private File mCurrentLocation;
 
 	private String finalItimePath;
+
+	private static final String TAG = "DnaReader";
 
 	/**
 	 * The file selector dialog.
@@ -70,55 +73,6 @@ public class FileSelector {
 
 	public void showDialogs() {
 
-		// final File sdCard = Environment.getExternalStorageDirectory();
-		//
-		// Toast.makeText(mContext, Environment.getExternalStorageState(),
-		// Toast.LENGTH_LONG).show();
-		//
-		// if (sdCard.canRead()) {
-		// Toast.makeText(mContext, "sd is readable", Toast.LENGTH_SHORT)
-		// .show();
-		// final Dialog mDialog2 = new Dialog(mContext);
-		// mDialog2.setContentView(R.layout.direction);
-		// mDialog2.show();
-		// Button sdbtn = (Button) mDialog2.findViewById(R.id.sdbtn);
-		// sdbtn.setOnClickListener(new OnClickListener() {
-		//
-		// @Override
-		// public void onClick(View v) {
-		//
-		// mCurrentLocation = sdCard;
-		// Toast.makeText(mContext,
-		// mCurrentLocation.getPath().toString(),
-		// Toast.LENGTH_LONG).show();
-		// mDialog2.dismiss();
-		// show();
-		// }
-		// });
-		//
-		// Button phonebtn = (Button) mDialog2.findViewById(R.id.phonebtn);
-		// phonebtn.setOnClickListener(new OnClickListener() {
-		//
-		// @Override
-		// public void onClick(View v) {
-		//
-		// mCurrentLocation = sdCard;
-		// Toast.makeText(mContext,
-		// mCurrentLocation.getPath().toString(),
-		// Toast.LENGTH_LONG).show();
-		// show();
-		// }
-		// });
-		//
-		// // Dialog mDialog2 = new Dialog(context);
-		// // mDialog2.setContentView(R.layout.direction);
-		//
-		// } else {
-		// mCurrentLocation = Environment.getRootDirectory();
-		// show();
-		// }
-		// prepareFilterSpinner(fileFilters);
-		// Toast.makeText(mContext, "we are in show", Toast.LENGTH_LONG).show();
 		prepareFilesList();
 		show();
 
@@ -260,12 +214,15 @@ public class FileSelector {
 			Graphic.secG.trace(abiTrace.getTrace(DNATools.g()));
 			Graphic.secT.trace(abiTrace.getTrace(DNATools.t()));
 
+			Graphic.baseCallsX = abiTrace.getBasecalls();
+			Graphic.baseCallsLetters = abiTrace.getSequence().seqString();
+
 			Graphic.isDrawing = true;
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			Log.e(TAG, "Exception:", e);
 		} catch (IllegalSymbolException e) {
-			e.printStackTrace();
+			Log.e(TAG, "Exception:", e);
 		}
 
 	}

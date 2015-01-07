@@ -7,8 +7,10 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Path;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -18,7 +20,7 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 
 	static DrawThread drawThread;
 
-	// static public boolean isAlloweed = false;
+	private static final String TAG = "DnaReader";
 
 	TextView tv;
 
@@ -35,7 +37,12 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 	float prevTouchY = 99999;
 	float prevTouchX = 99999;
 
+	static public int[] baseCallsX = null;
+	static public String baseCallsLetters = null;
+
 	static boolean isDrawing = false;
+
+	private char[] temp = null;
 
 	static public Sequence secA = new Sequence(DNATools.a());
 	static public Sequence secC = new Sequence(DNATools.c());
@@ -70,6 +77,7 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 
 	public Graphic(Context context, AttributeSet attrs) {
 		super(context);
+		Log.v(TAG, "Graphic Graphic");
 		getHolder().addCallback(this);
 
 	}
@@ -77,50 +85,39 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
 			int height) {
-
+		checkHeightRate = true;
+		Log.v(TAG, "Graphic surfaceChanged");
 	}
 
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
 		drawThread = new DrawThread(getHolder());
-
-		Graphic.secA = new Sequence(DNATools.a());
-		Graphic.secC = new Sequence(DNATools.c());
-		Graphic.secG = new Sequence(DNATools.g());
-		Graphic.secT = new Sequence(DNATools.t());
-
-		drawThread.setRunning(true);
+		Log.v(TAG, "Graphic surfaceCreated");
 		drawThread.start();
 	}
 
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
-		boolean retry = true;
-		drawThread.setRunning(false);
-		while (retry) {
-			try {
-				drawThread.join();
-				retry = false;
-			} catch (InterruptedException e) {
-			}
+		Log.v(TAG, "Graphic surfaceDestroyed");
+		drawThread.interrupt();
+		try {
+			drawThread.join();
+		} catch (InterruptedException e) {
+			Log.e(TAG, "Exception:", e);
 		}
 	}
 
 	class DrawThread extends Thread {
 
-		private boolean running = false;
 		private SurfaceHolder surfaceHolder;
 
 		public DrawThread(SurfaceHolder surfaceHolder) {
 			this.surfaceHolder = surfaceHolder;
-		}
-
-		public void setRunning(boolean running) {
-			this.running = running;
+			Log.v(TAG, "Graphic DrawThread");
 		}
 
 		private void drawingGraph(int[] trace, AtomicSymbol base) {
-
+			// Log.v(TAG, "Graphic drawingGraph");
 			Path path = new Path();
 			path.reset();
 			path.moveTo(graphstart, canvasHeight - trace[0] * realhHeightRate);
@@ -130,16 +127,18 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 
 			beggining = Math.abs((int) (graphstart / realhWidthRate));
 			ending = beggining + (int) (canvasWidth / realhWidthRate) + 3;
+
 			if (ending > trace.length)
 				ending = trace.length;
 
 			for (int i = beggining; i < ending; i += 1) {
-				if ((canvasHeight - trace[i] * realhHeightRate) < 20)
-					path.lineTo(graphstart + i * realhWidthRate, 20);
+				if ((canvasHeight - trace[i] * realhHeightRate) < 50)
+					path.lineTo(graphstart + i * realhWidthRate, 50);
 				else
 					path.lineTo(graphstart + i * realhWidthRate, canvasHeight
 							- trace[i] * realhHeightRate);
 			}
+
 			if (base == DNATools.a()) {
 				secA.path = path;
 			} else if (base == DNATools.c()) {
@@ -152,8 +151,44 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 
 		}
 
+		void drawSymbols(Canvas canvas) {
+			Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+			paint.setTextSize(50);
+			paint.setStyle(Paint.Style.FILL_AND_STROKE);
+			paint.setColor(Color.YELLOW);
+
+			temp = baseCallsLetters.toCharArray();
+			for (int i = 0; i < temp.length; i++) {
+				temp[i] = Character.toUpperCase(temp[i]);
+
+			}
+
+			for (int i = 0; i < temp.length; i++) {
+				switch (temp[i]) {
+				case 'A':
+					paint.setColor(Color.GREEN);
+					break;
+				case 'C':
+					paint.setColor(Color.BLUE);
+					break;
+				case 'G':
+					paint.setColor(Color.BLACK);
+					break;
+				case 'T':
+					paint.setColor(Color.RED);
+					break;
+				}
+
+				canvas.drawText(temp, i, 1, graphstart
+						+ (float) (baseCallsX[i]) * realhWidthRate, 40, paint);
+			}
+
+		}
+
 		@Override
 		public void run() {
+
+			Log.v(TAG, "Graphic run");
 
 			while (!drawThread.isInterrupted()) {
 
@@ -163,13 +198,21 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 					canvas = surfaceHolder.lockCanvas(null);
 
 					if (canvas == null || graphHeightRate == 0)
-						break;
+						return;
 
 					canvas.drawColor(Color.WHITE);
 
 					if (isDrawing) {
+						if (secA == null)
+							Log.v(TAG, "secA == null");
+
+						// Log.v(TAG, "graphWidth " + graphWidth);
+						// Log.v(TAG, "secA.trace.length " + secA.trace.length);
+						// Log.v(TAG, "realhWidthRate " + realhWidthRate);
+
 						graphWidth = secA.trace.length * realhWidthRate;
 						if (checkHeightRate) {
+							maxHeigt = 0;
 							canvasWidth = canvas.getWidth();
 							canvasHeight = canvas.getHeight() - 10;
 							maxHeigt = Math.max(Math.max(secA.max, secC.max),
@@ -189,6 +232,8 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 						canvas.drawPath(secC.path, secC.paint);
 						canvas.drawPath(secG.path, secG.paint);
 						canvas.drawPath(secT.path, secT.paint);
+
+						drawSymbols(canvas);
 					}
 				} finally {
 					if (canvas != null) {

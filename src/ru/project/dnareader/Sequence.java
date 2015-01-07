@@ -9,11 +9,9 @@ import android.graphics.Path;
 
 public class Sequence {
 	public int[] trace = null;
-	// public int[] avtrace = null; // average trace
 	public int color = 0;
 	public Paint paint = new Paint();
 	public int max = 0;
-	// public Path path = null;
 	public Path path;
 
 	public Sequence(AtomicSymbol base) {
@@ -33,7 +31,7 @@ public class Sequence {
 		}
 		// Log.v("TAG", "color" + color);
 
-		paint.setStrokeWidth(4);
+		paint.setStrokeWidth(5);
 		paint.setStyle(Paint.Style.STROKE);
 
 	}
@@ -50,14 +48,4 @@ public class Sequence {
 				max = trace[i];
 	}
 
-	// private void avtrace() {
-	// avtrace = trace;
-	// avtrace = new int[trace.length - 2];
-	// for (int i = 0; i < avtrace.length; i++) {
-	// if (i >= avtrace.length)
-	// break;
-	// avtrace[i] = (trace[i] + trace[i + 1] + trace[i + 2]) / 3;
-	//
-	// }
-	// }
 }

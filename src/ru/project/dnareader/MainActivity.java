@@ -25,7 +25,7 @@ public class MainActivity extends Activity {
 	static TextView tv2;
 	boolean status = false;
 	Context context;
-	boolean qwe = false;
+	private static final String TAG = "DnaReader";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,60 +40,34 @@ public class MainActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				if (!qwe) {
 
-					Graphic.checkHeightRate = true;
-					qwe = true;
-					// Graphic.isAlloweed = true;
+				Graphic.checkHeightRate = true;
 
-					try {
-						File abifile = new File(
-								"/storage/emulated/0/Download/GJA1-19-II-1-ex1_GJA1-1F_A2.ab1");
+				try {
+					File abifile = new File(
+							"/storage/emulated/0/Download/GJA1-19-II-1-ex1_GJA1-1F_A2.ab1");
 
-						ABITrace abiTrace = new ABITrace(abifile);
-						Graphic.secA.trace(abiTrace.getTrace(DNATools.a()));
-						Graphic.secC.trace(abiTrace.getTrace(DNATools.c()));
-						Graphic.secG.trace(abiTrace.getTrace(DNATools.g()));
-						Graphic.secT.trace(abiTrace.getTrace(DNATools.t()));
+					ABITrace abiTrace = new ABITrace(abifile);
+					Graphic.secA.trace(abiTrace.getTrace(DNATools.a()));
+					Graphic.secC.trace(abiTrace.getTrace(DNATools.c()));
+					Graphic.secG.trace(abiTrace.getTrace(DNATools.g()));
+					Graphic.secT.trace(abiTrace.getTrace(DNATools.t()));
 
-						Graphic.isDrawing = true;
+					Graphic.baseCallsX = abiTrace.getBasecalls();
+					Graphic.baseCallsLetters = abiTrace.getSequence()
+							.seqString();
+					Log.v(TAG, "     " + (Graphic.baseCallsLetters.length()));
+					Log.v(TAG, "     " + (Graphic.baseCallsX.length));
 
-					} catch (IOException e) {
-						e.printStackTrace();
-					} catch (IllegalSymbolException e) {
-						e.printStackTrace();
-					}
+					Graphic.isDrawing = true;
 
-				} else {
-
-					Graphic.checkHeightRate = true;
-					qwe = false;
-					// Graphic.isAlloweed = true;
-
-					try {
-						File abifile = new File(
-								"/storage/emulated/0/Download/QT42-ex-14_14F_C6.ab1");
-
-						ABITrace abiTrace = new ABITrace(abifile);
-						Graphic.secA.trace(abiTrace.getTrace(DNATools.a()));
-						Graphic.secC.trace(abiTrace.getTrace(DNATools.c()));
-						Graphic.secG.trace(abiTrace.getTrace(DNATools.g()));
-						Graphic.secT.trace(abiTrace.getTrace(DNATools.t()));
-
-						// Graphic.drawThread.setRunning(true);
-
-						// Graphic.drawThread.start();
-						Graphic.isDrawing = true;
-
-						// Graphic.checkHeightRate = false;
-
-					} catch (IOException e) {
-						e.printStackTrace();
-					} catch (IllegalSymbolException e) {
-						e.printStackTrace();
-					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				} catch (IllegalSymbolException e) {
+					e.printStackTrace();
 				}
 			}
+
 		});
 
 		btn1 = (Button) findViewById(R.id.button123);
@@ -113,11 +87,9 @@ public class MainActivity extends Activity {
 		switch (item.getItemId()) {
 		case R.id.loadFile:
 			showFileSelector();
-		case R.id.exit:
-			onDestroy();
-		default:
-			return super.onOptionsItemSelected(item);
+			break;
 		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	@Override
@@ -140,27 +112,4 @@ public class MainActivity extends Activity {
 
 	}
 
-	@Override
-	protected void onPause() {
-		// TODO Auto-generated method stub
-		Log.v("TAG", "MainActivity onPause");
-		// Graphic.isAlloweed = false;
-		super.onPause();
-	}
-
-	@Override
-	protected void onResume() {
-		// TODO Auto-generated method stub
-		Log.v("TAG", "MainActivity onResume");
-
-		// Graphic.isAlloweed = true;
-		super.onResume();
-	}
-
-	@Override
-	protected void onDestroy() {
-		Log.v("TAG", "MainActivity onDestroy");
-		// Graphic.onDestroy();
-		super.onDestroy();
-	}
 }

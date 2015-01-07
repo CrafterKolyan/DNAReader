@@ -9,62 +9,55 @@ import android.graphics.Path;
 import android.view.MotionEvent;
 import android.view.View;
 
-public class graphic2 extends View {
+public class graphic3 extends View {
 
-	Path path;
-	public static Paint p;
-
-	float x = 10;
-
-	float side = 0;
-
-	int mas[] = null;
-
-	public static int[] traceA;
-	public static int[] traceC;
-	public static int[] traceG;
-	public static int[] traceT;
-
-	boolean drag = false;
-	float dragX = 0;
-	float dragY = 0;
-
-	float canvasWidth = 0;
-	float canvasHeight = 0;
-
-	public static int[] a;
-
-	graphic2(Context context, int[] aa, int[] c, int[] g, int[] t) {
+	public graphic3(Context context) {
 		super(context);
-
 		path = new Path();
 
 		p = new Paint();
 		p.setStrokeWidth(6);
 		p.setStyle(Paint.Style.STROKE);
-		p.setColor(Color.BLUE);
-
 	}
 
+	Path path;
+	Paint p;
+	// Canvas canvas;
+
+	// ���������� ��� ��������� ��������
+	float x = 10;
+	// float y = 100;
+	float side = 0;
+
+	// ���������� ��� ��������������
+	boolean drag = false;
+	float dragX = 0;
+	float dragY = 0;
+
+	// ������ ������
+	float canvasWidth = 0;
+	float canvasHeight = 0;
+
 	protected void onDraw(Canvas canvas) {
-		super.onDraw(canvas);
 		canvasWidth = canvas.getWidth();
 		canvasHeight = canvas.getHeight();
 		path.reset();
 		float canvasH = canvasHeight;
 		float canvasW = 50;
 		path.moveTo(x, canvasHeight);
-		for (int i = 0; i < mas.length; i++) {
-			path.lineTo(mas[i], canvasW);
-			canvasW += 50;
+		while (canvasH > 100) {
+			path.lineTo(x + canvasW, canvasHeight - canvasH);
+			path.lineTo(x + canvasW + 50, canvasHeight);
+			canvasW += 100;
+			canvasH -= 100;
 		}
 		side = canvasW - 50;
-
+		p.setColor(Color.BLUE);
 		canvas.drawPath(path, p);
-		invalidate();
 	}
 
 	@SuppressLint("ClickableViewAccessibility")
+	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		float evX = event.getX();
 
