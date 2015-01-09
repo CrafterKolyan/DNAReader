@@ -25,7 +25,7 @@ public class MainActivity extends Activity {
 	static TextView tv2;
 	boolean status = false;
 	Context context;
-	View qw = null;
+	View myView = null;
 	private static final String TAG = "DnaReader";
 
 	@Override
@@ -38,9 +38,9 @@ public class MainActivity extends Activity {
 		tv2 = (TextView) findViewById(R.id.textView2);
 		btn = (Button) findViewById(R.id.button1);
 
-		qw = (View) findViewById(R.id.mySurface);
+		myView = (View) findViewById(R.id.mySurface);
 
-		if (qw == null)
+		if (myView == null)
 			// Log.v(TAG, "qw == null");
 			Toast.makeText(this, "qw == null", Toast.LENGTH_LONG).show();
 		else
