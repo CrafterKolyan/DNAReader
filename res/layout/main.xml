@@ -1,8 +1,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-     android:background="#FFFFFF"
-    android:gravity="top" >
+    android:background="#FFFFFF"
+    android:gravity="top" 
+    android:id="@+id/main">
     
     <Button
         android:id="@+id/button1"
@@ -10,39 +11,39 @@
         android:layout_height="wrap_content"
         android:text="Построить" />
 
-        <ru.project.dnareader.Graphic
-            android:id="@+id/mySurface"
-            android:layout_width="match_parent"
-            android:layout_height="20dp"
-            android:layout_alignParentBottom="true"
-            android:layout_below="@+id/button1"
-            android:layout_centerHorizontal="true"
-            android:layout_margin="10dp"
-            android:background="#FFFFFF" />
+   <ru.project.dnareader.Graphic
+       android:id="@+id/mySurface"
+       android:layout_width="match_parent"
+       android:layout_height="20dp"
+       android:layout_alignParentBottom="true"
+       android:layout_below="@+id/button1"
+       android:layout_centerHorizontal="true"
+       android:layout_margin="10dp"
+       android:background="#FFFFFF" />
 
-        <Button
-            android:id="@+id/button123"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:text="В начало" />
+   <Button
+       android:id="@+id/button123"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_alignParentTop="true"
+       android:layout_centerHorizontal="true"
+       android:text="В начало" />
 
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/mySurface"
-            android:layout_alignParentRight="true"
-            android:text="TextView" />
+   <TextView
+       android:id="@+id/textView2"
+       android:layout_width="100dp"
+       android:layout_height="wrap_content"
+       android:layout_above="@+id/mySurface"
+       android:layout_alignParentRight="true"
+       android:text="TextView" />
 
-        <TextView
-            android:id="@+id/textView1"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/mySurface"
-            android:layout_below = "@+id/textView2"
-            android:layout_alignParentRight="true"
-            android:text="TextView" />
+   <TextView
+       android:id="@+id/textView1"
+       android:layout_width="100dp"
+       android:layout_height="wrap_content"
+       android:layout_above="@+id/mySurface"
+       android:layout_below = "@+id/textView2"
+       android:layout_alignParentRight="true"
+       android:text="TextView" />
 
 </RelativeLayout>

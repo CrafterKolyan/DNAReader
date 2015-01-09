@@ -10,12 +10,12 @@ import org.biojava.bio.symbol.IllegalSymbolException;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
@@ -25,6 +25,7 @@ public class MainActivity extends Activity {
 	static TextView tv2;
 	boolean status = false;
 	Context context;
+	View qw = null;
 	private static final String TAG = "DnaReader";
 
 	@Override
@@ -36,6 +37,16 @@ public class MainActivity extends Activity {
 		tv1 = (TextView) findViewById(R.id.textView1);
 		tv2 = (TextView) findViewById(R.id.textView2);
 		btn = (Button) findViewById(R.id.button1);
+
+		qw = (View) findViewById(R.id.mySurface);
+
+		if (qw == null)
+			// Log.v(TAG, "qw == null");
+			Toast.makeText(this, "qw == null", Toast.LENGTH_LONG).show();
+		else
+			// // Log.v(TAG, "qw != null");
+			Toast.makeText(this, "qw != null", Toast.LENGTH_LONG).show();
+
 		btn.setOnClickListener(new View.OnClickListener() {
 
 			@Override
@@ -56,10 +67,10 @@ public class MainActivity extends Activity {
 					Graphic.baseCallsX = abiTrace.getBasecalls();
 					Graphic.baseCallsLetters = abiTrace.getSequence()
 							.seqString();
-					Log.v(TAG, "     " + (Graphic.baseCallsLetters.length()));
-					Log.v(TAG, "     " + (Graphic.baseCallsX.length));
 
 					Graphic.isDrawing = true;
+
+					// qw.invalidate();
 
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -80,6 +91,22 @@ public class MainActivity extends Activity {
 		});
 
 	}
+
+	// @Override
+	// public View onCreateView(View parent, String name, Context context,
+	// AttributeSet attrs) {
+	// // TODO Auto-generated method stub
+	// qw = (View) findViewById(R.id.mySurface);
+	//
+	// if (qw == null)
+	// Log.v(TAG, "qw == null");
+	// // Toast.makeText(this, "qw == null", Toast.LENGTH_LONG).show();
+	// else
+	// Log.v(TAG, "qw != null");
+	// // Toast.makeText(this, "qw != null", Toast.LENGTH_LONG).show();
+	//
+	// return super.onCreateView(parent, name, context, attrs);
+	// }
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
