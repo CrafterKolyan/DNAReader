@@ -1,11 +1,6 @@
 package ru.project.dnareader;
 
 import java.io.File;
-import java.io.IOException;
-
-import org.biojava.bio.program.abi.ABITrace;
-import org.biojava.bio.seq.DNATools;
-import org.biojava.bio.symbol.IllegalSymbolException;
 
 import android.app.Activity;
 import android.content.Context;
@@ -52,31 +47,8 @@ public class MainActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 
-				Graphic.checkHeightRate = true;
-
-				try {
-					File abifile = new File(
-							"/storage/emulated/0/Download/GJA1-19-II-1-ex1_GJA1-1F_A2.ab1");
-
-					ABITrace abiTrace = new ABITrace(abifile);
-					Graphic.secA.trace(abiTrace.getTrace(DNATools.a()));
-					Graphic.secC.trace(abiTrace.getTrace(DNATools.c()));
-					Graphic.secG.trace(abiTrace.getTrace(DNATools.g()));
-					Graphic.secT.trace(abiTrace.getTrace(DNATools.t()));
-
-					Graphic.baseCallsX = abiTrace.getBasecalls();
-					Graphic.baseCallsLetters = abiTrace.getSequence()
-							.seqString();
-
-					Graphic.isDrawing = true;
-
-					// qw.invalidate();
-
-				} catch (IOException e) {
-					e.printStackTrace();
-				} catch (IllegalSymbolException e) {
-					e.printStackTrace();
-				}
+				Graphic.newData(new File(
+						"/storage/emulated/0/Download/GJA1-19-II-1-ex1_GJA1-1F_A2.ab1"));
 			}
 
 		});

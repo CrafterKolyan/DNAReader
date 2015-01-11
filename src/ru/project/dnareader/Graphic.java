@@ -1,7 +1,12 @@
 package ru.project.dnareader;
 
+import java.io.File;
+import java.io.IOException;
+
+import org.biojava.bio.program.abi.ABITrace;
 import org.biojava.bio.seq.DNATools;
 import org.biojava.bio.symbol.AtomicSymbol;
+import org.biojava.bio.symbol.IllegalSymbolException;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -10,14 +15,15 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
-import android.view.View;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.widget.TextView;
-//import android.util.Log;
 
-public class Graphic extends View {
+public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 
-	// static DrawThread drawThread;
+	static DrawThread drawThread;
 
 	private static final String TAG = "DnaReader";
 
@@ -52,8 +58,6 @@ public class Graphic extends View {
 
 	static boolean checkHeightRate = true;
 
-	// private SurfaceHolder surfaceHolder;
-
 	boolean drag = false;
 	boolean swype = false;
 
@@ -76,116 +80,218 @@ public class Graphic extends View {
 	float canvasWidth = 0;
 	float canvasHeight = 0;
 
+	public Graphic(Context context) {
+		super(context);
+
+		Log.v(TAG, "Graphic Graphic 1");
+		getHolder().addCallback(this);
+	}
+
 	public Graphic(Context context, AttributeSet attrs) {
 		super(context);
-		// Log.v(TAG, "Graphic Graphic");
 
+		SurfaceHolder holder = getHolder();
+		holder.addCallback(this);
+
+		Log.v(TAG, "Graphic Graphic 2");
+		getHolder().addCallback(this);
+	}
+
+	public Graphic(Context context, AttributeSet attrs, int defStyle) {
+		super(context, attrs, defStyle);
+		Log.v(TAG, "Graphic Graphic 3");
+		getHolder().addCallback(this);
+	}
+
+	public static void newData(File file) {
+		checkHeightRate = true;
+
+		try {
+
+			ABITrace abiTrace = new ABITrace(file);
+			secA.trace(abiTrace.getTrace(DNATools.a()));
+			secC.trace(abiTrace.getTrace(DNATools.c()));
+			secG.trace(abiTrace.getTrace(DNATools.g()));
+			secT.trace(abiTrace.getTrace(DNATools.t()));
+
+			baseCallsX = abiTrace.getBasecalls();
+			baseCallsLetters = abiTrace.getSequence().seqString();
+			// Log.v(TAG, "     " + (Graphic.baseCallsLetters.length()));
+			// Log.v(TAG, "     " + (Graphic.baseCallsX.length));
+
+			isDrawing = true;
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (IllegalSymbolException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
-	protected void onDraw(Canvas canvas) {
-		super.onDraw(canvas);
-
-		if (canvas == null || graphHeightRate == 0)
-			return;
-
-		canvas.drawColor(Color.WHITE);
-
-		if (isDrawing) {
-
-			graphWidth = secA.trace.length * realhWidthRate;
-			if (checkHeightRate) {
-				maxHeigt = 0;
-				canvasWidth = canvas.getWidth();
-				canvasHeight = canvas.getHeight() - 10;
-				maxHeigt = Math.max(Math.max(secA.max, secC.max),
-						Math.max(secG.max, secT.max));
-				graphHeightRate = (canvasHeight - 40) / maxHeigt;
-				checkHeightRate = false;
-				realhHeightRate = graphHeightRate;
-				realhHeightRate2 = graphHeightRate;
-			}
-
-			drawingGraph(secA.trace, DNATools.a());
-			drawingGraph(secC.trace, DNATools.c());
-			drawingGraph(secG.trace, DNATools.g());
-			drawingGraph(secT.trace, DNATools.t());
-
-			canvas.drawPath(secA.path, secA.paint);
-			canvas.drawPath(secC.path, secC.paint);
-			canvas.drawPath(secG.path, secG.paint);
-			canvas.drawPath(secT.path, secT.paint);
-
-			drawSymbols(canvas);
-		}
-
+	public void surfaceChanged(SurfaceHolder holder, int format, int width,
+			int height) {
+		checkHeightRate = true;
+		Log.v(TAG, "Graphic surfaceChanged");
 	}
 
-	private void drawingGraph(int[] trace, AtomicSymbol base) {
-
-		Path path = new Path();
-		path.reset();
-		path.moveTo(graphstart, canvasHeight - trace[0] * realhHeightRate);
-
-		int beggining = 0;
-		int ending = 0;
-
-		beggining = Math.abs((int) (graphstart / realhWidthRate));
-		ending = beggining + (int) (canvasWidth / realhWidthRate) + 3;
-
-		if (ending > trace.length)
-			ending = trace.length;
-
-		for (int i = beggining; i < ending; i += 1) {
-			if ((canvasHeight - trace[i] * realhHeightRate) < 50)
-				path.lineTo(graphstart + i * realhWidthRate, 50);
-			else
-				path.lineTo(graphstart + i * realhWidthRate, canvasHeight
-						- trace[i] * realhHeightRate);
-		}
-
-		if (base == DNATools.a()) {
-			secA.path = path;
-		} else if (base == DNATools.c()) {
-			secC.path = path;
-		} else if (base == DNATools.g()) {
-			secG.path = path;
-		} else if (base == DNATools.t()) {
-			secT.path = path;
-		}
-
+	@Override
+	public void surfaceCreated(SurfaceHolder holder) {
+		drawThread = new DrawThread(getHolder());
+		Log.v(TAG, "Graphic surfaceCreated");
+		drawThread.start();
 	}
 
-	void drawSymbols(Canvas canvas) {
-		Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-		paint.setTextSize(50);
-		paint.setStyle(Paint.Style.FILL_AND_STROKE);
-		paint.setColor(Color.YELLOW);
+	@Override
+	public void surfaceDestroyed(SurfaceHolder holder) {
+		Log.v(TAG, "Graphic surfaceDestroyed");
+		drawThread.interrupt();
+		try {
+			drawThread.join();
+		} catch (InterruptedException e) {
+			Log.e(TAG, "Exception:", e);
+		}
+	}
 
-		temp = baseCallsLetters.toCharArray();
-		for (int i = 0; i < temp.length; i++) {
-			temp[i] = Character.toUpperCase(temp[i]);
+	class DrawThread extends Thread {
+
+		private SurfaceHolder surfaceHolder;
+
+		public DrawThread(SurfaceHolder surfaceHolder) {
+			this.surfaceHolder = surfaceHolder;
+			Log.v(TAG, "Graphic DrawThread");
+		}
+
+		private void drawingGraph(int[] trace, AtomicSymbol base) {
+			// Log.v(TAG, "Graphic drawingGraph");
+			Path path = new Path();
+			path.reset();
+			path.moveTo(graphstart, canvasHeight - trace[0] * realhHeightRate);
+
+			int beggining = 0;
+			int ending = 0;
+
+			beggining = Math.abs((int) (graphstart / realhWidthRate));
+			ending = beggining + (int) (canvasWidth / realhWidthRate) + 3;
+
+			if (ending > trace.length)
+				ending = trace.length;
+
+			for (int i = beggining; i < ending; i += 1) {
+				if ((canvasHeight - trace[i] * realhHeightRate) < 50)
+					path.lineTo(graphstart + i * realhWidthRate, 50);
+				else
+					path.lineTo(graphstart + i * realhWidthRate, canvasHeight
+							- trace[i] * realhHeightRate);
+			}
+
+			if (base == DNATools.a()) {
+				secA.path = path;
+			} else if (base == DNATools.c()) {
+				secC.path = path;
+			} else if (base == DNATools.g()) {
+				secG.path = path;
+			} else if (base == DNATools.t()) {
+				secT.path = path;
+			}
 
 		}
 
-		for (int i = 0; i < temp.length; i++) {
-			switch (temp[i]) {
-			case 'A':
-				paint.setColor(Color.GREEN);
-				break;
-			case 'C':
-				paint.setColor(Color.BLUE);
-				break;
-			case 'G':
-				paint.setColor(Color.BLACK);
-				break;
-			case 'T':
-				paint.setColor(Color.RED);
-				break;
+		void drawSymbols(Canvas canvas) {
+			Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+			paint.setTextSize(50);
+			paint.setStyle(Paint.Style.FILL_AND_STROKE);
+			paint.setColor(Color.YELLOW);
+
+			temp = baseCallsLetters.toCharArray();
+			for (int i = 0; i < temp.length; i++) {
+				temp[i] = Character.toUpperCase(temp[i]);
+
 			}
 
-			canvas.drawText(temp, i, 1, graphstart + (float) (baseCallsX[i])
-					* realhWidthRate - 17, 40, paint);
+			for (int i = 0; i < temp.length; i++) {
+				switch (temp[i]) {
+				case 'A':
+					paint.setColor(Color.GREEN);
+					break;
+				case 'C':
+					paint.setColor(Color.BLUE);
+					break;
+				case 'G':
+					paint.setColor(Color.BLACK);
+					break;
+				case 'T':
+					paint.setColor(Color.RED);
+					break;
+				}
+
+				canvas.drawText(temp, i, 1, graphstart
+						+ (float) (baseCallsX[i]) * realhWidthRate, 40, paint);
+			}
+
+		}
+
+		@Override
+		public void run() {
+
+			Log.v(TAG, "Graphic run");
+
+			while (!drawThread.isInterrupted()) {
+
+				canvas = null;
+
+				try {
+					canvas = surfaceHolder.lockCanvas(null);
+					if (canvas == null)
+						Log.v(TAG, "canvas == null");
+					else
+						Log.v(TAG, "canvas != null");
+
+					if (canvas == null || graphHeightRate == 0)
+						return;
+
+					canvas.drawColor(Color.WHITE);
+
+					if (isDrawing) {
+						if (secA == null)
+							Log.v(TAG, "secA == null");
+
+						// Log.v(TAG, "graphWidth " + graphWidth);
+						// Log.v(TAG, "secA.trace.length " + secA.trace.length);
+						// Log.v(TAG, "realhWidthRate " + realhWidthRate);
+
+						graphWidth = secA.trace.length * realhWidthRate;
+						if (checkHeightRate) {
+							maxHeigt = 0;
+							canvasWidth = canvas.getWidth();
+							canvasHeight = canvas.getHeight() - 10;
+							maxHeigt = Math.max(Math.max(secA.max, secC.max),
+									Math.max(secG.max, secT.max));
+							graphHeightRate = (canvasHeight - 40) / maxHeigt;
+							checkHeightRate = false;
+							realhHeightRate = graphHeightRate;
+							realhHeightRate2 = graphHeightRate;
+						}
+
+						drawingGraph(secA.trace, DNATools.a());
+						drawingGraph(secC.trace, DNATools.c());
+						drawingGraph(secG.trace, DNATools.g());
+						drawingGraph(secT.trace, DNATools.t());
+
+						canvas.drawPath(secA.path, secA.paint);
+						canvas.drawPath(secC.path, secC.paint);
+						canvas.drawPath(secG.path, secG.paint);
+						canvas.drawPath(secT.path, secT.paint);
+
+						drawSymbols(canvas);
+					}
+				} finally {
+					if (canvas != null) {
+						surfaceHolder.unlockCanvasAndPost(canvas);
+					}
+				}
+
+			}
 		}
 
 	}
@@ -224,7 +330,6 @@ public class Graphic extends View {
 					&& (graphstart + graphWidth) < canvasWidth)
 				graphstart = -graphWidth + canvasWidth;
 			drag = false;
-			invalidate();
 			break;
 
 		case MotionEvent.ACTION_POINTER_UP:
@@ -234,7 +339,6 @@ public class Graphic extends View {
 				swype = false;
 				drag = false;
 			}
-			invalidate();
 			break;
 
 		case MotionEvent.ACTION_MOVE:
@@ -275,10 +379,10 @@ public class Graphic extends View {
 					realhHeightRate = realhHeightRate2 * realDiffrentY;
 
 				graphstart = staticX - staticDist * realhWidthRate;
-				invalidate();
+
 				break;
 			}
-			invalidate();
+
 			break;
 		}
 		return true;
@@ -300,14 +404,6 @@ public class Graphic extends View {
 		prevTouchX = event.getX();
 		prevTouchY = event.getY();
 
-		invalidate();
-
 	}
-
-	// private void inv() {
-	//
-	// drawThread.start();
-	//
-	// }
 
 }
