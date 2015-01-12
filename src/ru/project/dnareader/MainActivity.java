@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
@@ -20,7 +19,7 @@ public class MainActivity extends Activity {
 	static TextView tv2;
 	boolean status = false;
 	Context context;
-	View myView = null;
+	Graphic myView = null;
 	private static final String TAG = "DnaReader";
 
 	@Override
@@ -33,22 +32,27 @@ public class MainActivity extends Activity {
 		tv2 = (TextView) findViewById(R.id.textView2);
 		btn = (Button) findViewById(R.id.button1);
 
-		myView = (View) findViewById(R.id.mySurface);
+		myView = (Graphic) findViewById(R.id.mySurface);
 
-		if (myView == null)
-			// Log.v(TAG, "qw == null");
-			Toast.makeText(this, "qw == null", Toast.LENGTH_LONG).show();
-		else
-			// // Log.v(TAG, "qw != null");
-			Toast.makeText(this, "qw != null", Toast.LENGTH_LONG).show();
+		myView.newData(new File(
+				"/storage/emulated/0/Download/GJA1-19-II-1-ex1_GJA1-1F_A2.ab1"));
+
+		// if (myView == null)
+		// // Log.v(TAG, "qw == null");
+		// Toast.makeText(this, "qw == null", Toast.LENGTH_LONG).show();
+		// else
+		// // // Log.v(TAG, "qw != null");
+		// Toast.makeText(this, "qw != null", Toast.LENGTH_LONG).show();
 
 		btn.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 
-				Graphic.newData(new File(
-						"/storage/emulated/0/Download/GJA1-19-II-1-ex1_GJA1-1F_A2.ab1"));
+				((Graphic) findViewById(R.id.mySurface))
+						.newData(new File(
+								"/storage/emulated/0/Download/GJA1-19-II-1-ex1_GJA1-1F_A2.ab1"));
+
 			}
 
 		});
@@ -58,7 +62,7 @@ public class MainActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				Graphic.graphstart = 0;
+				((Graphic) findViewById(R.id.mySurface)).graphToBegin();
 			}
 		});
 
@@ -103,7 +107,7 @@ public class MainActivity extends Activity {
 		final String[] mFileFilter = { ".ab1", ".abi" };
 
 		final FileSelector fileSelector = new FileSelector(MainActivity.this,
-				mFileFilter);
+				mFileFilter, myView);
 		fileSelector.showDialogs();
 	}
 

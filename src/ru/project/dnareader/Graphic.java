@@ -2,6 +2,7 @@ package ru.project.dnareader;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import org.biojava.bio.program.abi.ABITrace;
 import org.biojava.bio.seq.DNATools;
@@ -19,66 +20,84 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.widget.TextView;
 
 public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 
-	static DrawThread drawThread;
+	private DrawThread mDrawThread;
+
+	private ScrollThread mScrollThread;
 
 	private static final String TAG = "DnaReader";
 
-	TextView tv;
+	private boolean mScrollDirection;// true-палец двигался с права на лево
 
-	float staticX = 0;
-	float staticDist = 0;
+	private boolean mScrollThreadCheck = false;
 
-	static float graphstart = 0;
+	private float mSpeed;
 
-	float graphWidth = 0;
+	// private TextView tv;
 
-	long prevTime = 9999;
-	long maxTime = 600;
-	float maxDistant = 100;
-	float prevTouchY = 99999;
-	float prevTouchX = 99999;
+	private float staticX = 0;
+	private float staticDist = 0;
 
-	static public int[] baseCallsX = null;
-	static public String baseCallsLetters = null;
+	private float mGraphstart = 0;
 
-	static boolean isDrawing = false;
+	private float mGraphWidth = 0;
 
-	private char[] temp = null;
+	private float[][] mPreviousTouches = new float[10][2];
 
-	static public Sequence secA = new Sequence(DNATools.a());
-	static public Sequence secC = new Sequence(DNATools.c());
-	static public Sequence secG = new Sequence(DNATools.g());
-	static public Sequence secT = new Sequence(DNATools.t());
+	private long[] mPreviousTime = new long[10];
 
-	static Canvas canvas = null;
+	private long mPreviousTime1 = 9999;
 
-	static boolean checkHeightRate = true;
+	private float mPreviousTouchX1 = 99999;
+	// private float mPreviousTouchX2 = 99999;
+	// private float mPreviousTouchX3 = 99999;
+	// private float mPreviousTouchX4 = 99999;
 
-	boolean drag = false;
-	boolean swype = false;
+	private float mPrevTouchY = 99999;
 
-	float dragX = 0;
-	float dragY = 0;
+	private long mMaxTime = 600;
+	private float mMaxDistant = 100;
 
-	static float maxHeigt = 0;
+	private int[] mBaseCallsX = null;
+	private char[] mBaseCallsLetters = null;
 
-	static float graphHeightRate = 1;
+	private boolean mIsDrawing = false;
 
-	static float realhHeightRate = 1;
-	static float realhWidthRate = 10;
+	// private char[] mTemp = null;
 
-	static float realhHeightRate2 = 1;
-	static float realhWidthRate2 = 10;
+	private Sequence mSecA = new Sequence(DNATools.a());
+	private Sequence mSecC = new Sequence(DNATools.c());
+	private Sequence mSecG = new Sequence(DNATools.g());
+	private Sequence mSecT = new Sequence(DNATools.t());
 
-	float diffrentX = 0;
-	float diffrentY = 0;
+	private Canvas mCanvas = null;
 
-	float canvasWidth = 0;
-	float canvasHeight = 0;
+	private boolean mCheckHeightRate = true;
+
+	private boolean mDrag = false;
+	private boolean mSwype = false;
+
+	private float mDragX = 0;
+	@SuppressWarnings("unused")
+	private float mDragY = 0;
+
+	private float mMaxGraphicHeigt = 0;
+
+	private float mGraphHeightRate = 1;
+
+	private float mRealhHeightRate = 1;
+	private float mRealhWidthRate = 10;
+
+	private float mRealhHeightRateTemp = 1;
+	private float mRealhWidthRateTemp = 10;
+
+	private float mDiffrentX = 0;
+	private float mDiffrentY = 0;
+
+	private float mCanvasWidth = 0;
+	private float mCanvasHeight = 0;
 
 	public Graphic(Context context) {
 		super(context);
@@ -88,7 +107,7 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 	}
 
 	public Graphic(Context context, AttributeSet attrs) {
-		super(context);
+		super(context, attrs);
 
 		SurfaceHolder holder = getHolder();
 		holder.addCallback(this);
@@ -103,23 +122,24 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 		getHolder().addCallback(this);
 	}
 
-	public static void newData(File file) {
-		checkHeightRate = true;
+	public void newData(File file) {
+		mCheckHeightRate = true;
 
 		try {
 
 			ABITrace abiTrace = new ABITrace(file);
-			secA.trace(abiTrace.getTrace(DNATools.a()));
-			secC.trace(abiTrace.getTrace(DNATools.c()));
-			secG.trace(abiTrace.getTrace(DNATools.g()));
-			secT.trace(abiTrace.getTrace(DNATools.t()));
+			mSecA.trace(abiTrace.getTrace(DNATools.a()));
+			mSecC.trace(abiTrace.getTrace(DNATools.c()));
+			mSecG.trace(abiTrace.getTrace(DNATools.g()));
+			mSecT.trace(abiTrace.getTrace(DNATools.t()));
 
-			baseCallsX = abiTrace.getBasecalls();
-			baseCallsLetters = abiTrace.getSequence().seqString();
+			mBaseCallsX = abiTrace.getBasecalls();
+			mBaseCallsLetters = abiTrace.getSequence().seqString()
+					.toCharArray();
 			// Log.v(TAG, "     " + (Graphic.baseCallsLetters.length()));
 			// Log.v(TAG, "     " + (Graphic.baseCallsX.length));
 
-			isDrawing = true;
+			mIsDrawing = true;
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -131,23 +151,31 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
 			int height) {
-		checkHeightRate = true;
+		mCheckHeightRate = true;
 		Log.v(TAG, "Graphic surfaceChanged");
 	}
 
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
-		drawThread = new DrawThread(getHolder());
+		mScrollThread = new ScrollThread();
+		mScrollThread.start();
+		// mScrollThread.run();
+
+		// mScrollThread.interrupt();
+		// ((Thread) mScrollThread).start();
+		// mScrollThread.run();
+
+		mDrawThread = new DrawThread(getHolder());
 		Log.v(TAG, "Graphic surfaceCreated");
-		drawThread.start();
+		mDrawThread.start();
 	}
 
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		Log.v(TAG, "Graphic surfaceDestroyed");
-		drawThread.interrupt();
+		mDrawThread.interrupt();
 		try {
-			drawThread.join();
+			mDrawThread.join();
 		} catch (InterruptedException e) {
 			Log.e(TAG, "Exception:", e);
 		}
@@ -166,51 +194,55 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 			// Log.v(TAG, "Graphic drawingGraph");
 			Path path = new Path();
 			path.reset();
-			path.moveTo(graphstart, canvasHeight - trace[0] * realhHeightRate);
+			path.moveTo(mGraphstart, mCanvasHeight - trace[0]
+					* mRealhHeightRate);
 
 			int beggining = 0;
 			int ending = 0;
 
-			beggining = Math.abs((int) (graphstart / realhWidthRate));
-			ending = beggining + (int) (canvasWidth / realhWidthRate) + 3;
+			beggining = Math.abs((int) (mGraphstart / mRealhWidthRate));
+			ending = beggining + (int) (mCanvasWidth / mRealhWidthRate) + 3;
 
 			if (ending > trace.length)
 				ending = trace.length;
 
 			for (int i = beggining; i < ending; i += 1) {
-				if ((canvasHeight - trace[i] * realhHeightRate) < 50)
-					path.lineTo(graphstart + i * realhWidthRate, 50);
+				if ((mCanvasHeight - trace[i] * mRealhHeightRate) < 50)
+					path.lineTo(mGraphstart + i * mRealhWidthRate, 50);
 				else
-					path.lineTo(graphstart + i * realhWidthRate, canvasHeight
-							- trace[i] * realhHeightRate);
+					path.lineTo(mGraphstart + i * mRealhWidthRate,
+							mCanvasHeight - trace[i] * mRealhHeightRate);
 			}
 
 			if (base == DNATools.a()) {
-				secA.path = path;
+				mSecA.path = path;
 			} else if (base == DNATools.c()) {
-				secC.path = path;
+				mSecC.path = path;
 			} else if (base == DNATools.g()) {
-				secG.path = path;
+				mSecG.path = path;
 			} else if (base == DNATools.t()) {
-				secT.path = path;
+				mSecT.path = path;
 			}
 
 		}
 
-		void drawSymbols(Canvas canvas) {
+		@SuppressWarnings("unused")
+		private void drawSymbols(Canvas canvas) {
 			Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 			paint.setTextSize(50);
 			paint.setStyle(Paint.Style.FILL_AND_STROKE);
 			paint.setColor(Color.YELLOW);
 
-			temp = baseCallsLetters.toCharArray();
-			for (int i = 0; i < temp.length; i++) {
-				temp[i] = Character.toUpperCase(temp[i]);
+			// mTemp = mBaseCallsLetters.toCharArray();
+
+			for (int i = 0; i < mBaseCallsLetters.length; i++) {
+				mBaseCallsLetters[i] = Character
+						.toUpperCase(mBaseCallsLetters[i]);
 
 			}
 
-			for (int i = 0; i < temp.length; i++) {
-				switch (temp[i]) {
+			for (int i = 0; i < mBaseCallsLetters.length; i++) {
+				switch (mBaseCallsLetters[i]) {
 				case 'A':
 					paint.setColor(Color.GREEN);
 					break;
@@ -225,8 +257,8 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 					break;
 				}
 
-				canvas.drawText(temp, i, 1, graphstart
-						+ (float) (baseCallsX[i]) * realhWidthRate, 40, paint);
+				canvas.drawText(mBaseCallsLetters, i, 1, mGraphstart
+						+ (float) (mBaseCallsX[i]) * mRealhWidthRate, 40, paint);
 			}
 
 		}
@@ -236,64 +268,98 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 
 			Log.v(TAG, "Graphic run");
 
-			while (!drawThread.isInterrupted()) {
+			while (!mDrawThread.isInterrupted()) {
 
-				canvas = null;
+				mCanvas = null;
 
 				try {
-					canvas = surfaceHolder.lockCanvas(null);
-					if (canvas == null)
-						Log.v(TAG, "canvas == null");
-					else
-						Log.v(TAG, "canvas != null");
+					mCanvas = surfaceHolder.lockCanvas(null);
 
-					if (canvas == null || graphHeightRate == 0)
+					if (mCanvas == null || mGraphHeightRate == 0)
 						return;
 
-					canvas.drawColor(Color.WHITE);
+					mCanvas.drawColor(Color.WHITE);
 
-					if (isDrawing) {
-						if (secA == null)
+					if (mIsDrawing) {
+						if (mSecA == null)
 							Log.v(TAG, "secA == null");
 
 						// Log.v(TAG, "graphWidth " + graphWidth);
 						// Log.v(TAG, "secA.trace.length " + secA.trace.length);
 						// Log.v(TAG, "realhWidthRate " + realhWidthRate);
 
-						graphWidth = secA.trace.length * realhWidthRate;
-						if (checkHeightRate) {
-							maxHeigt = 0;
-							canvasWidth = canvas.getWidth();
-							canvasHeight = canvas.getHeight() - 10;
-							maxHeigt = Math.max(Math.max(secA.max, secC.max),
-									Math.max(secG.max, secT.max));
-							graphHeightRate = (canvasHeight - 40) / maxHeigt;
-							checkHeightRate = false;
-							realhHeightRate = graphHeightRate;
-							realhHeightRate2 = graphHeightRate;
+						mGraphWidth = mSecA.trace.length * mRealhWidthRate;
+						if (mCheckHeightRate) {
+							mMaxGraphicHeigt = 0;
+							mCanvasWidth = mCanvas.getWidth();
+							mCanvasHeight = mCanvas.getHeight() - 10;
+							mMaxGraphicHeigt = Math.max(
+									Math.max(mSecA.max, mSecC.max),
+									Math.max(mSecG.max, mSecT.max));
+							mGraphHeightRate = (mCanvasHeight - 40)
+									/ mMaxGraphicHeigt;
+							mCheckHeightRate = false;
+							mRealhHeightRate = mGraphHeightRate;
+							mRealhHeightRateTemp = mGraphHeightRate;
 						}
 
-						drawingGraph(secA.trace, DNATools.a());
-						drawingGraph(secC.trace, DNATools.c());
-						drawingGraph(secG.trace, DNATools.g());
-						drawingGraph(secT.trace, DNATools.t());
+						drawingGraph(mSecA.trace, DNATools.a());
+						drawingGraph(mSecC.trace, DNATools.c());
+						drawingGraph(mSecG.trace, DNATools.g());
+						drawingGraph(mSecT.trace, DNATools.t());
 
-						canvas.drawPath(secA.path, secA.paint);
-						canvas.drawPath(secC.path, secC.paint);
-						canvas.drawPath(secG.path, secG.paint);
-						canvas.drawPath(secT.path, secT.paint);
+						mCanvas.drawPath(mSecA.path, mSecA.paint);
+						mCanvas.drawPath(mSecC.path, mSecC.paint);
+						mCanvas.drawPath(mSecG.path, mSecG.paint);
+						mCanvas.drawPath(mSecT.path, mSecT.paint);
 
-						drawSymbols(canvas);
+						// drawSymbols(mCanvas);
 					}
 				} finally {
-					if (canvas != null) {
-						surfaceHolder.unlockCanvasAndPost(canvas);
+					if (mCanvas != null) {
+						surfaceHolder.unlockCanvasAndPost(mCanvas);
 					}
 				}
 
 			}
 		}
 
+	}
+
+	class ScrollThread extends Thread {
+
+		public ScrollThread() {
+
+		}
+
+		@Override
+		public void run() {
+			while (true) {
+				if (mScrollThread.isInterrupted())
+					return;
+
+				while (mScrollThreadCheck) {
+					if (mSpeed < 0) {
+						mScrollThreadCheck = false;
+						break;
+					}
+					mSpeed -= 0.01;
+
+					if (mScrollDirection) {
+						mGraphstart -= mSpeed;
+					} else {
+						mGraphstart += mSpeed;
+					}
+
+					try {
+						TimeUnit.MILLISECONDS.sleep(2);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+
+				}
+			}
+		}
 	}
 
 	@SuppressLint("ClickableViewAccessibility")
@@ -306,61 +372,114 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 
 		switch (actionMask) {
 		case MotionEvent.ACTION_DOWN:
-			drag = true;
+			// Log.v(TAG, "ACTION_DOWN");
+
+			// mScrollThread.interrupt();
+			mScrollThreadCheck = false;
+
+			mDrag = true;
 			evX1 = event.getX(0);
-			dragX = evX1 - graphstart;
-			doubleClick(event);
+			mDragX = evX1 - mGraphstart;
+			// doubleClick(event);
+
+			for (int i = 0; i < mPreviousTime.length; i++) {
+				mPreviousTime[i] = System.currentTimeMillis();
+			}
+
+			for (int i = 0; i < mPreviousTouches.length; i++) {
+				mPreviousTouches[i][0] = event.getX();
+				mPreviousTouches[i][1] = event.getY();
+
+			}
 			break;
 
 		case MotionEvent.ACTION_POINTER_DOWN:
 			if (pointerCount == 2) {
-				swype = true;
-				drag = false;
-				diffrentX = Math.abs(event.getX(0) - event.getX(1));
-				diffrentY = Math.abs(event.getY(0) - event.getY(1)) + 3;
+				mSwype = true;
+				mDrag = false;
+				mDiffrentX = Math.abs(event.getX(0) - event.getX(1));
+				mDiffrentY = Math.abs(event.getY(0) - event.getY(1)) + 3;
 				staticX = (event.getX(0) + event.getX(1)) / 2;
-				staticDist = (Math.abs((graphstart - staticX) / realhWidthRate));
+				staticDist = (Math.abs((mGraphstart - staticX)
+						/ mRealhWidthRate));
 			}
 			break;
 
 		case MotionEvent.ACTION_UP:
-			if (graphstart < 100 && graphstart > 0)
-				graphstart = 0;
-			else if ((graphstart + graphWidth) > 980
-					&& (graphstart + graphWidth) < canvasWidth)
-				graphstart = -graphWidth + canvasWidth;
-			drag = false;
+			// Log.v(TAG, "ACTION_UP");
+
+			if (mGraphstart < 100 && mGraphstart > 0)
+				mGraphstart = 0;
+			else if ((mGraphstart + mGraphWidth) > 980
+					&& (mGraphstart + mGraphWidth) < mCanvasWidth)
+				mGraphstart = -mGraphWidth + mCanvasWidth;
+
+			mDrag = false;
+
+			double difDistX = mPreviousTouches[0][0]
+					- mPreviousTouches[mPreviousTouches.length - 1][0];
+
+			if (difDistX > 0)
+				mScrollDirection = false;
+			else
+				mScrollDirection = true;
+
+			difDistX = Math.abs(difDistX);
+
+			long difTime = mPreviousTime[0]
+					- mPreviousTime[mPreviousTime.length - 1];
+
+			mSpeed = (float) (difDistX / difTime);
+
+			mScrollThreadCheck = true;
+
 			break;
 
 		case MotionEvent.ACTION_POINTER_UP:
 			if (pointerCount == 2) {
-				realhHeightRate2 = realhHeightRate;
-				realhWidthRate2 = realhWidthRate;
-				swype = false;
-				drag = false;
+				mRealhHeightRateTemp = mRealhHeightRate;
+				mRealhWidthRateTemp = mRealhWidthRate;
+				mSwype = false;
+				mDrag = false;
 			}
 			break;
 
 		case MotionEvent.ACTION_MOVE:
-			MainActivity.tv1.setText(" " + graphWidth);
-			MainActivity.tv2.setText(" " + canvasWidth);
+			MainActivity.tv1.setText(" " + mGraphWidth);
+			MainActivity.tv2.setText(" " + mCanvasWidth);
 
-			if (drag) {
+			if (mDrag) {
 				evX1 = event.getX(0);
-				graphstart = (evX1 - dragX);
-				if (graphstart > 100) {
-					graphstart = 99;
-					dragX = evX1 - graphstart;
+
+				for (int i = 0; i < (mPreviousTouches.length - 1); i++) {
+					mPreviousTouches[i + 1][0] = mPreviousTouches[i][0];
+					mPreviousTouches[i + 1][1] = mPreviousTouches[i][1];
+				}
+
+				mPreviousTouches[0][0] = event.getX();
+				mPreviousTouches[0][1] = event.getY();
+
+				for (int i = 0; i < (mPreviousTime.length - 1); i++) {
+					mPreviousTime[i + 1] = mPreviousTime[i];
+				}
+
+				mPreviousTime[0] = System.currentTimeMillis();
+
+				mGraphstart = (evX1 - mDragX);
+
+				if (mGraphstart > 100) {
+					mGraphstart = 99;
+					mDragX = evX1 - mGraphstart;
 					invalidate();
 					break;
-				} else if (((graphstart + graphWidth) < (canvasWidth - 100))) {
-					graphstart = canvasWidth - 100 - graphWidth + 1;
+				} else if (((mGraphstart + mGraphWidth) < (mCanvasWidth - 100))) {
+					mGraphstart = mCanvasWidth - 100 - mGraphWidth + 1;
 					invalidate();
 					break;
 				}
 
 			}
-			if (swype) {
+			if (mSwype) {
 
 				// try {
 				// TimeUnit.MILLISECONDS.sleep(100);
@@ -369,16 +488,16 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 				// }
 
 				float realDiffrentX = Math.abs(event.getX(0) - event.getX(1))
-						/ (diffrentX);
+						/ (mDiffrentX);
 				float realDiffrentY = Math.abs(event.getY(0) - event.getY(1))
-						/ (diffrentY);
+						/ (mDiffrentY);
 				if (Math.abs(event.getX(0) - event.getX(1))
 						/ Math.abs(event.getY(0) - event.getY(1)) > 1)
-					realhWidthRate = realhWidthRate2 * realDiffrentX;
+					mRealhWidthRate = mRealhWidthRateTemp * realDiffrentX;
 				else
-					realhHeightRate = realhHeightRate2 * realDiffrentY;
+					mRealhHeightRate = mRealhHeightRateTemp * realDiffrentY;
 
-				graphstart = staticX - staticDist * realhWidthRate;
+				mGraphstart = staticX - staticDist * mRealhWidthRate;
 
 				break;
 			}
@@ -388,22 +507,26 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 		return true;
 	}
 
-	private void doubleClick(MotionEvent event) {
-		boolean time = (System.currentTimeMillis() - prevTime) < maxTime;
-		boolean distant = ((event.getX() - prevTouchX) < maxDistant)
-				&& ((event.getY() - prevTouchY) < maxDistant);
-
-		if (time && distant) {
-			realhHeightRate = graphHeightRate;
-			realhHeightRate2 = graphHeightRate;
-			realhWidthRate = 10;
-			realhWidthRate2 = 10;
-		}
-
-		prevTime = System.currentTimeMillis();
-		prevTouchX = event.getX();
-		prevTouchY = event.getY();
-
+	// private void doubleClick(MotionEvent event) {
+	// boolean time = (System.currentTimeMillis() - mPreviousTime1) < mMaxTime;
+	// boolean distant = ((event.getX() - mPreviousTouchX1) < mMaxDistant)
+	// && ((event.getY() - mPrevTouchY) < mMaxDistant);
+	//
+	// if (time && distant) {
+	// mRealhHeightRate = mGraphHeightRate;
+	// mRealhHeightRateTemp = mGraphHeightRate;
+	// mRealhWidthRate = 10;
+	// mRealhWidthRateTemp = 10;
+	// }
+	//
+	// mPreviousTime1 = System.currentTimeMillis();
+	// mPreviousTouchX1 = event.getX();
+	// mPrevTouchY = event.getY();
+	//
+	// }
+	//
+	public void graphToBegin() {
+		mGraphstart = 0;
 	}
 
 }

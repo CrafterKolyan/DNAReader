@@ -1,18 +1,12 @@
 package ru.project.dnareader;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-
-import org.biojava.bio.program.abi.ABITrace;
-import org.biojava.bio.seq.DNATools;
-import org.biojava.bio.symbol.IllegalSymbolException;
 
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Environment;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -48,6 +42,7 @@ public class FileSelector {
 	private String[] fileFilters;
 
 	private Context mContext;
+	private Graphic graphView;
 
 	/**
 	 * Constructor that creates the file selector dialog.
@@ -61,8 +56,12 @@ public class FileSelector {
 	 * @param fileFilters
 	 *            Array with filters
 	 */
-	public FileSelector(final Context context, final String[] fileFilters) {
+	public FileSelector(final Context context, final String[] fileFilters,
+			Graphic graphView) {
 		this.fileFilters = fileFilters;
+
+		this.graphView = graphView;
+
 		mContext = context;
 		mCurrentLocation = Environment.getExternalStorageDirectory();
 
@@ -202,28 +201,7 @@ public class FileSelector {
 	public void dismiss() {
 		mDialog.dismiss();
 
-		Graphic.checkHeightRate = true;
-		// Graphic.isAlloweed = true;
-
-		try {
-			File abifile = new File(finalItimePath);
-
-			ABITrace abiTrace = new ABITrace(abifile);
-			Graphic.secA.trace(abiTrace.getTrace(DNATools.a()));
-			Graphic.secC.trace(abiTrace.getTrace(DNATools.c()));
-			Graphic.secG.trace(abiTrace.getTrace(DNATools.g()));
-			Graphic.secT.trace(abiTrace.getTrace(DNATools.t()));
-
-			Graphic.baseCallsX = abiTrace.getBasecalls();
-			Graphic.baseCallsLetters = abiTrace.getSequence().seqString();
-
-			Graphic.isDrawing = true;
-
-		} catch (IOException e) {
-			Log.e(TAG, "Exception:", e);
-		} catch (IllegalSymbolException e) {
-			Log.e(TAG, "Exception:", e);
-		}
+		graphView.newData(new File(finalItimePath));
 
 	}
 }

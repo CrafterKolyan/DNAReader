@@ -19,7 +19,7 @@
        android:layout_below="@+id/button1"
        android:layout_centerHorizontal="true"
        android:layout_margin="10dp"
-       android:background="#FFFFFF" />
+        />
 
    <Button
        android:id="@+id/button123"
