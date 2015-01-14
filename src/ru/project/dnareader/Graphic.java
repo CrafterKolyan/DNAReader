@@ -64,8 +64,6 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 	private float mCanvasWidth = 0;
 	private float mCanvasHeight = 0;
 
-	private Context mContext = null;
-
 	@SuppressWarnings("unused")
 	private float mDragY = 0;
 
@@ -92,10 +90,8 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 		getHolder().addCallback(this);
 	}
 
-	public void newData(File file, Context context) {
+	public void newData(File file) {
 		mCheckHeightRate = true;
-
-		mContext = context;
 
 		try {
 
@@ -126,22 +122,11 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
+
 		mScrollThread = new ScrollThread();
 		mScrollThread.start();
 		mDrawThread = new DrawThread(getHolder());
 		Log.v(TAG, "Graphic surfaceCreated");
-
-		// char[] qwer = { 'х', 'у', 'й', 'н', 'я' };
-
-		// if (tv1 == null) {
-		// // Toast.makeText(mContext, "tv1 == null",
-		// // Toast.LENGTH_LONG).show();
-		// Log.v("TAGg", "х");
-		// for (int i = 0; i < 100; i++)
-		// Log.v("TAGg", "у");
-		// Log.v("TAGg", "й");
-		// }
-
 		mDrawThread.start();
 	}
 
@@ -170,15 +155,11 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 			path.reset();
 			path.moveTo(mGraphstart, mCanvasHeight - trace[0]
 					* mRealhHeightRate);
-
 			int beggining = 0;
 			int ending = 0;
 
 			beggining = Math.abs((int) (mGraphstart / mRealhWidthRate));
 			ending = beggining + (int) (mCanvasWidth / mRealhWidthRate) + 3;
-
-			MainActivity.tv2.setText("beggining: " + beggining);
-			MainActivity.tv3.setText("mGraphHeightRate: " + mGraphHeightRate);
 
 			if (ending > trace.length)
 				ending = trace.length;
@@ -203,7 +184,6 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 
 		}
 
-		@SuppressWarnings("unused")
 		private void drawSymbols(Canvas canvas) {
 			Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 			paint.setTextSize(50);
@@ -286,8 +266,6 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 						mCanvas.drawPath(mSecG.path, mSecG.paint);
 						mCanvas.drawPath(mSecT.path, mSecT.paint);
 
-						MainActivity.tv1.setText("mGraphtart: " + mGraphstart);
-						// tv2.
 					}
 				} finally {
 					if (mCanvas != null) {
@@ -381,8 +359,9 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 			if (mGraphstart < 100 && mGraphstart > 0)
 				mGraphstart = 0;
 			else if ((mGraphstart + mGraphWidth) > 980
-					&& (mGraphstart + mGraphWidth) < mCanvasWidth)
+					&& (mGraphstart + mGraphWidth) < mCanvasWidth) {
 				mGraphstart = -mGraphWidth + mCanvasWidth;
+			}
 
 			mDrag = false;
 
@@ -398,9 +377,8 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 
 			long difTime = mPreviousTime[0]
 					- mPreviousTime[mPreviousTime.length - 1];
-
-			mSpeed = (float) (difDistX / difTime);
-
+			if (difTime != 0)
+				mSpeed = (float) (difDistX / difTime);
 			mScrollThreadCheck = true;
 
 			break;
@@ -415,8 +393,6 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 			break;
 
 		case MotionEvent.ACTION_MOVE:
-			// MainActivity.tv1.setText(" " + mGraphWidth);
-			// MainActivity.tv2.setText(" " + mCanvasWidth);
 
 			if (mDrag) {
 				evX1 = event.getX(0);
@@ -434,17 +410,14 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 				}
 
 				mPreviousTime[0] = System.currentTimeMillis();
-
 				mGraphstart = (evX1 - mDragX);
 
 				if (mGraphstart > 100) {
 					mGraphstart = 99;
 					mDragX = evX1 - mGraphstart;
-					invalidate();
 					break;
 				} else if (((mGraphstart + mGraphWidth) < (mCanvasWidth - 100))) {
 					mGraphstart = mCanvasWidth - 100 - mGraphWidth + 1;
-					invalidate();
 					break;
 				}
 
@@ -466,7 +439,6 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 					mRealhWidthRate = mRealhWidthRateTemp * realDiffrentX;
 				else
 					mRealhHeightRate = mRealhHeightRateTemp * realDiffrentY;
-
 				mGraphstart = staticX - staticDist * mRealhWidthRate;
 
 				break;

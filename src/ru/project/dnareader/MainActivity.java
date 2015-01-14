@@ -39,23 +39,13 @@ public class MainActivity extends Activity {
 
 		myView = (Graphic) findViewById(R.id.mySurface);
 
-		myView.newData(
-				new File(
-						"/storage/emulated/0/Download/GJA1-19-II-1-ex1_GJA1-1F_A2.ab1"),
-				context);
+		myView.newData(new File(
+				"/storage/emulated/0/Download/GJA1-19-II-1-ex1_GJA1-1F_A2.ab1"));
 
 		tv1 = (TextView) findViewById(R.id.textView1);
 		tv2 = (TextView) findViewById(R.id.textView2);
 		tv3 = (TextView) findViewById(R.id.textView3);
 		tv4 = (TextView) findViewById(R.id.textView4);
-
-		// if (myView == null)
-		// // Log.v(TAG, "qw == null");
-		// Toast.makeText(this, "qw == null", Toast.LENGTH_LONG).show();
-		// else
-		// // // Log.v(TAG, "qw != null");
-		// Toast.makeText(this, "qw != null", Toast.LENGTH_LONG).show();
-		// Toast.makeText(this, text, duration)
 
 		btn.setOnClickListener(new View.OnClickListener() {
 
@@ -63,10 +53,8 @@ public class MainActivity extends Activity {
 			public void onClick(View v) {
 
 				((Graphic) findViewById(R.id.mySurface))
-						.newData(
-								new File(
-										"/storage/emulated/0/Download/GJA1-19-II-1-ex1_GJA1-1F_A2.ab1"),
-								context);
+						.newData(new File(
+								"/storage/emulated/0/Download/GJA1-19-II-1-ex1_GJA1-1F_A2.ab1"));
 
 			}
 
@@ -82,22 +70,6 @@ public class MainActivity extends Activity {
 		});
 
 	}
-
-	// @Override
-	// public View onCreateView(View parent, String name, Context context,
-	// AttributeSet attrs) {
-	// // TODO Auto-generated method stub
-	// qw = (View) findViewById(R.id.mySurface);
-	//
-	// if (qw == null)
-	// Log.v(TAG, "qw == null");
-	// // Toast.makeText(this, "qw == null", Toast.LENGTH_LONG).show();
-	// else
-	// Log.v(TAG, "qw != null");
-	// // Toast.makeText(this, "qw != null", Toast.LENGTH_LONG).show();
-	//
-	// return super.onCreateView(parent, name, context, attrs);
-	// }
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -128,6 +100,15 @@ public class MainActivity extends Activity {
 
 	public static void continuee(String ABIfilePath) {
 
+	}
+
+	public void setText(final TextView text, final String value) {
+		runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				text.setText(value);
+			}
+		});
 	}
 
 }
