@@ -201,7 +201,7 @@ public class FileSelector {
 	public void dismiss() {
 		mDialog.dismiss();
 
-		graphView.newData(new File(finalItimePath));
+		graphView.newData(new File(finalItimePath), mContext);
 
 	}
 }
