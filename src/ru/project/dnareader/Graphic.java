@@ -2,6 +2,7 @@ package ru.project.dnareader;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Vector;
 import java.util.concurrent.TimeUnit;
 
 import org.biojava.bio.program.abi.ABITrace;
@@ -39,8 +40,8 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 	private long mPreviousTime1 = Long.MAX_VALUE;
 	private float mPreviousTouchX1 = Float.MAX_VALUE;
 	private float mPrevTouchY = Float.MAX_VALUE;
-	private long mMaxTime = 500;
-	private float mMaxDistant = 50;
+	private long mMaxTime = 300;
+	private float mMaxDistant = 20;
 	private int[] mBaseCallsX = null;
 	private char[] mBaseCallsLetters = null;
 	private boolean mIsDrawing = false;
@@ -63,6 +64,7 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 	private float mDiffrentY = 0;
 	private float mCanvasWidth = 0;
 	private float mCanvasHeight = 0;
+	private int[] mDoublePeaks = { 0 };
 
 	@SuppressWarnings("unused")
 	private float mDragY = 0;
@@ -111,6 +113,52 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 		} catch (IllegalSymbolException e) {
 			e.printStackTrace();
 		}
+
+		mDoublePeaks = doublePeaks();
+
+	}
+
+	private int[] doublePeaks() {
+		Vector<Integer> vec = new Vector<Integer>();
+		Integer[] vec1 = null;
+		int[] vec2;
+
+		for (int i = 0; i < mBaseCallsX.length; i++) {
+			if ((Max(true, mBaseCallsX[i]) / Max(false, mBaseCallsX[i])) > 0.5) {
+				vec.add(Integer.valueOf(mBaseCallsX[i]));
+			}
+		}
+		vec1 = new Integer[vec.size()];
+
+		vec.toArray(vec1);
+		vec2 = new int[vec.size()];
+
+		for (int i = 0; i < vec.size(); i++)
+			vec2[i] = vec1[i].intValue();
+
+		return vec2;
+	}
+
+	private float Max(boolean bool, int x) {
+		float[] arr = { mSecA.trace[x], mSecC.trace[x], mSecG.trace[x],
+				mSecT.trace[x] };
+		float max1 = 0;
+		float max2 = 0;
+
+		for (int i = 0; i < arr.length; i++) {
+			if (max1 < arr[i])
+				max1 = arr[i];
+		}
+
+		for (int i = 0; i < arr.length; i++) {
+			if (arr[i] < max1 && max2 < arr[i])
+				max2 = arr[i];
+		}
+
+		if (bool)
+			return max2;
+		else
+			return max1;
 	}
 
 	@Override
@@ -127,6 +175,7 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 		mScrollThread.start();
 		mDrawThread = new DrawThread(getHolder());
 		Log.v(TAG, "Graphic surfaceCreated");
+
 		mDrawThread.start();
 	}
 
@@ -165,9 +214,19 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 				ending = trace.length;
 
 			for (int i = beggining; i < ending; i += 1) {
-				if ((mCanvasHeight - trace[i] * mRealhHeightRate) < 50)
-					path.lineTo(mGraphstart + i * mRealhWidthRate, 50);
-				else
+				if ((mCanvasHeight - trace[i] * mRealhHeightRate) < 50) {
+
+					if (base == DNATools.a()) {
+						path.lineTo(mGraphstart + i * mRealhWidthRate, 57);
+					} else if (base == DNATools.c()) {
+						path.lineTo(mGraphstart + i * mRealhWidthRate, 53);
+					} else if (base == DNATools.g()) {
+						path.lineTo(mGraphstart + i * mRealhWidthRate, 49);
+					} else if (base == DNATools.t()) {
+						path.lineTo(mGraphstart + i * mRealhWidthRate, 45);
+					}
+
+				} else
 					path.lineTo(mGraphstart + i * mRealhWidthRate,
 							mCanvasHeight - trace[i] * mRealhHeightRate);
 			}
@@ -184,10 +243,23 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 
 		}
 
-		private void drawSymbols(Canvas canvas) {
+		private void drawPeaks() {
+			Paint paint = new Paint();
+			paint.setColor(Color.YELLOW);
+
+			Log.v(TAG, "mDoublePeaks.length " + mDoublePeaks.length);
+
+			for (int i = 0; i < mDoublePeaks.length; i++) {
+				mCanvas.drawRect(mGraphstart + mDoublePeaks[i]
+						* mRealhWidthRate - 10, 50, mGraphstart
+						+ mDoublePeaks[i] * mRealhWidthRate + 10,
+						mCanvasHeight, paint);
+			}
+
+		}
+
+		private void drawSymbols() {
 			Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-			paint.setTextSize(50);
-			paint.setStyle(Paint.Style.FILL_AND_STROKE);
 			paint.setColor(Color.YELLOW);
 
 			for (int i = 0; i < mBaseCallsLetters.length; i++) {
@@ -196,27 +268,47 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 
 			}
 
-			for (int i = 0; i < mBaseCallsLetters.length; i++) {
-				switch (mBaseCallsLetters[i]) {
-				case 'A':
-					paint.setColor(Color.GREEN);
-					break;
-				case 'C':
-					paint.setColor(Color.BLUE);
-					break;
-				case 'G':
-					paint.setColor(Color.BLACK);
-					break;
-				case 'T':
-					paint.setColor(Color.RED);
-					break;
-				}
+			int begging = Math.abs((int) (mGraphstart / mRealhWidthRate)) - 20;
+			int end = (int) (begging + mCanvasWidth / mRealhWidthRate) + 20;
 
-				canvas.drawText(mBaseCallsLetters, i, 1, mGraphstart
-						+ (float) (mBaseCallsX[i]) * mRealhWidthRate, 40, paint);
+			// Log.v(TAG, "begging: " + begging);
+			// Log.v(TAG, "end:" + end);
+
+			for (int i = 0; i < mBaseCallsLetters.length; i++) {
+				if (mBaseCallsX[i] > begging && mBaseCallsX[i] < end) {
+					paint.reset();
+					paint.setTextSize(50);
+					paint.setStyle(Paint.Style.FILL_AND_STROKE);
+					switch (mBaseCallsLetters[i]) {
+					case 'A':
+						paint.setColor(Color.GREEN);
+						break;
+					case 'C':
+						paint.setColor(Color.BLUE);
+						break;
+					case 'G':
+						paint.setColor(Color.BLACK);
+						break;
+					case 'T':
+						paint.setColor(Color.RED);
+						break;
+					}
+
+					mCanvas.drawText(mBaseCallsLetters, i, 1, mGraphstart
+							+ (float) (mBaseCallsX[i]) * mRealhWidthRate - 15,
+							40, paint);
+
+					// drawColumn(mBaseCallsLetters[i]);
+				} else if (mBaseCallsLetters[i] >= end)
+					return;
 			}
 
 		}
+
+		// private void drawColumn(char c) {
+		//
+		//
+		// }
 
 		@Override
 		public void run() {
@@ -254,7 +346,9 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 							mRealhHeightRateTemp = mGraphHeightRate;
 						}
 
-						drawSymbols(mCanvas);
+						drawSymbols();
+
+						drawPeaks();
 
 						drawingGraph(mSecA.trace, DNATools.a());
 						drawingGraph(mSecC.trace, DNATools.c());
