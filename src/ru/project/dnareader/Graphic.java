@@ -65,6 +65,7 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 	private float mCanvasWidth = 0;
 	private float mCanvasHeight = 0;
 	private int[] mDoublePeaks = { 0 };
+	private int mExtraPartOfGraphic = 0;
 
 	@SuppressWarnings("unused")
 	private float mDragY = 0;
@@ -93,6 +94,7 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 	}
 
 	public void newData(File file) {
+
 		mCheckHeightRate = true;
 
 		try {
@@ -102,19 +104,20 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 			mSecC.trace(abiTrace.getTrace(DNATools.c()));
 			mSecG.trace(abiTrace.getTrace(DNATools.g()));
 			mSecT.trace(abiTrace.getTrace(DNATools.t()));
-
 			mBaseCallsX = abiTrace.getBasecalls();
 			mBaseCallsLetters = abiTrace.getSequence().seqString()
 					.toCharArray();
-			mIsDrawing = true;
+			mExtraPartOfGraphic = mSecC.trace.length
+					- mBaseCallsX[mBaseCallsX.length - 1] - 40;
+			mDoublePeaks = doublePeaks();
+			Log.v(TAG, "base: " + mBaseCallsX[mBaseCallsX.length - 1]);
 
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (IllegalSymbolException e) {
 			e.printStackTrace();
 		}
-
-		mDoublePeaks = doublePeaks();
+		mIsDrawing = true;
 
 	}
 
@@ -210,8 +213,8 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 			beggining = Math.abs((int) (mGraphstart / mRealhWidthRate));
 			ending = beggining + (int) (mCanvasWidth / mRealhWidthRate) + 3;
 
-			if (ending > trace.length)
-				ending = trace.length;
+			if (ending > trace.length - mExtraPartOfGraphic)
+				ending = trace.length - mExtraPartOfGraphic;
 
 			for (int i = beggining; i < ending; i += 1) {
 				if ((mCanvasHeight - trace[i] * mRealhHeightRate) < 50) {
@@ -247,15 +250,12 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 			Paint paint = new Paint();
 			paint.setColor(Color.YELLOW);
 
-			Log.v(TAG, "mDoublePeaks.length " + mDoublePeaks.length);
-
 			for (int i = 0; i < mDoublePeaks.length; i++) {
 				mCanvas.drawRect(mGraphstart + mDoublePeaks[i]
 						* mRealhWidthRate - 10, 50, mGraphstart
 						+ mDoublePeaks[i] * mRealhWidthRate + 10,
 						mCanvasHeight, paint);
 			}
-
 		}
 
 		private void drawSymbols() {
@@ -270,9 +270,6 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 
 			int begging = Math.abs((int) (mGraphstart / mRealhWidthRate)) - 20;
 			int end = (int) (begging + mCanvasWidth / mRealhWidthRate) + 20;
-
-			// Log.v(TAG, "begging: " + begging);
-			// Log.v(TAG, "end:" + end);
 
 			for (int i = 0; i < mBaseCallsLetters.length; i++) {
 				if (mBaseCallsX[i] > begging && mBaseCallsX[i] < end) {
@@ -298,17 +295,11 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 							+ (float) (mBaseCallsX[i]) * mRealhWidthRate - 15,
 							40, paint);
 
-					// drawColumn(mBaseCallsLetters[i]);
 				} else if (mBaseCallsLetters[i] >= end)
 					return;
 			}
 
 		}
-
-		// private void drawColumn(char c) {
-		//
-		//
-		// }
 
 		@Override
 		public void run() {
@@ -331,7 +322,12 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 						if (mSecA == null)
 							Log.v(TAG, "secA == null");
 
-						mGraphWidth = mSecA.trace.length * mRealhWidthRate;
+						mGraphWidth = (mSecA.trace.length - mExtraPartOfGraphic)
+								* mRealhWidthRate;
+
+						// Log.v(TAG, "mExtraPartOfGraphic" +
+						// mExtraPartOfGraphic);
+						// Log.v(TAG, "mGraphWidth" + mGraphWidth);
 						if (mCheckHeightRate) {
 							mMaxGraphicHeigt = 0;
 							mCanvasWidth = mCanvas.getWidth();
@@ -400,6 +396,11 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 						break;
 					}
 
+					if (mGraphstart + mGraphWidth < mCanvasWidth) {
+						mScrollThreadCheck = false;
+						break;
+					}
+
 					try {
 						TimeUnit.MILLISECONDS.sleep(2);
 					} catch (InterruptedException e) {
@@ -452,7 +453,7 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 		case MotionEvent.ACTION_UP:
 			if (mGraphstart < 100 && mGraphstart > 0)
 				mGraphstart = 0;
-			else if ((mGraphstart + mGraphWidth) > 980
+			else if ((mGraphstart + mGraphWidth) > (mCanvasWidth - 100)
 					&& (mGraphstart + mGraphWidth) < mCanvasWidth) {
 				mGraphstart = -mGraphWidth + mCanvasWidth;
 			}
