@@ -1,7 +1,5 @@
 package ru.project.dnareader;
 
-import java.io.File;
-
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
@@ -13,19 +11,11 @@ import android.widget.TextView;
 
 public class MainActivity extends Activity {
 
-	Button btn;
 	Button btn1;
-	// static TextView tv1;
-	// static TextView tv2;
+	Button btn2;
 	boolean status = false;
 	Context context;
-	Graphic myView = null;
 	private static final String TAG = "DnaReader";
-
-	static TextView tv1;
-	static TextView tv2;
-	static TextView tv3;
-	static TextView tv4;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -33,35 +23,20 @@ public class MainActivity extends Activity {
 
 		setContentView(R.layout.main);
 
-		// tv1 = (TextView) findViewById(R.id.textView1);
-		// tv2 = (TextView) findViewById(R.id.textView2);
-		btn = (Button) findViewById(R.id.button1);
+		// ((Graphic) findViewById(R.id.mySurface)).newData(new File(
+		// "/storage/emulated/0/Download/GJA1-19-II-1-ex1_GJA1-1F_A2.ab1"));
 
-		myView = (Graphic) findViewById(R.id.mySurface);
+		btn1 = (Button) findViewById(R.id.button1);
 
-		myView.newData(new File(
-				"/storage/emulated/0/Download/GJA1-19-II-1-ex1_GJA1-1F_A2.ab1"));
-
-		tv1 = (TextView) findViewById(R.id.textView1);
-		tv2 = (TextView) findViewById(R.id.textView2);
-		tv3 = (TextView) findViewById(R.id.textView3);
-		tv4 = (TextView) findViewById(R.id.textView4);
-
-		btn.setOnClickListener(new View.OnClickListener() {
-
+		btn1.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-
-				((Graphic) findViewById(R.id.mySurface))
-						.newData(new File(
-								"/storage/emulated/0/Download/GJA1-19-II-1-ex1_GJA1-1F_A2.ab1"));
-
+				new Download();
 			}
-
 		});
 
-		btn1 = (Button) findViewById(R.id.button123);
-		btn1.setOnClickListener(new View.OnClickListener() {
+		btn2 = (Button) findViewById(R.id.button2);
+		btn2.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -94,7 +69,7 @@ public class MainActivity extends Activity {
 		final String[] mFileFilter = { ".ab1", ".abi" };
 
 		final FileSelector fileSelector = new FileSelector(MainActivity.this,
-				mFileFilter, myView);
+				mFileFilter, (Graphic) findViewById(R.id.mySurface));
 		fileSelector.showDialogs();
 	}
 

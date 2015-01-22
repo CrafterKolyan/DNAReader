@@ -35,13 +35,13 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 	private float staticDist = 0;
 	private float mGraphstart = 0;
 	private float mGraphWidth = 0;
-	private float[][] mPreviousTouches = new float[10][2];
+	private float[] mPreviousTouches = new float[5];
 	private long[] mPreviousTime = new long[10];
-	private long mPreviousTime1 = Long.MAX_VALUE;
-	private float mPreviousTouchX1 = Float.MAX_VALUE;
-	private float mPrevTouchY = Float.MAX_VALUE;
+	private long mPreviousTime1 = 0;
+	private float mPreviousTouchX1 = 0;
+	private float mPrevTouchY = 0;
 	private long mMaxTime = 300;
-	private float mMaxDistant = 20;
+	private float mMaxDistant = 30;
 	private int[] mBaseCallsX = null;
 	private char[] mBaseCallsLetters = null;
 	private boolean mIsDrawing = false;
@@ -64,14 +64,17 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 	private float mDiffrentY = 0;
 	private float mCanvasWidth = 0;
 	private float mCanvasHeight = 0;
-	private int[] mDoublePeaks = { 0 };
-	private int mExtraPartOfGraphic = 0;
+	private int[] mDoublePeaks = null;
+	private int mExtraPartOfGraphic = 50;
 
 	@SuppressWarnings("unused")
 	private float mDragY = 0;
 
 	public Graphic(Context context) {
 		super(context);
+
+		SurfaceHolder holder = getHolder();
+		holder.addCallback(this);
 
 		Log.v(TAG, "Graphic Graphic 1");
 		getHolder().addCallback(this);
@@ -89,6 +92,10 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 
 	public Graphic(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
+
+		SurfaceHolder holder = getHolder();
+		holder.addCallback(this);
+
 		Log.v(TAG, "Graphic Graphic 3");
 		getHolder().addCallback(this);
 	}
@@ -207,11 +214,9 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 			path.reset();
 			path.moveTo(mGraphstart, mCanvasHeight - trace[0]
 					* mRealhHeightRate);
-			int beggining = 0;
-			int ending = 0;
 
-			beggining = Math.abs((int) (mGraphstart / mRealhWidthRate));
-			ending = beggining + (int) (mCanvasWidth / mRealhWidthRate) + 3;
+			int beggining = Math.abs((int) (mGraphstart / mRealhWidthRate));
+			int ending = beggining + (int) (mCanvasWidth / mRealhWidthRate) + 3;
 
 			if (ending > trace.length - mExtraPartOfGraphic)
 				ending = trace.length - mExtraPartOfGraphic;
@@ -248,12 +253,12 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 
 		private void drawPeaks() {
 			Paint paint = new Paint();
-			paint.setColor(Color.YELLOW);
+			paint.setColor(Color.parseColor("#40FF0000"));
 
 			for (int i = 0; i < mDoublePeaks.length; i++) {
 				mCanvas.drawRect(mGraphstart + mDoublePeaks[i]
-						* mRealhWidthRate - 10, 50, mGraphstart
-						+ mDoublePeaks[i] * mRealhWidthRate + 10,
+						* mRealhWidthRate - 15, 50, mGraphstart
+						+ mDoublePeaks[i] * mRealhWidthRate + 15,
 						mCanvasHeight, paint);
 			}
 		}
@@ -325,9 +330,6 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 						mGraphWidth = (mSecA.trace.length - mExtraPartOfGraphic)
 								* mRealhWidthRate;
 
-						// Log.v(TAG, "mExtraPartOfGraphic" +
-						// mExtraPartOfGraphic);
-						// Log.v(TAG, "mGraphWidth" + mGraphWidth);
 						if (mCheckHeightRate) {
 							mMaxGraphicHeigt = 0;
 							mCanvasWidth = mCanvas.getWidth();
@@ -383,7 +385,7 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 						mScrollThreadCheck = false;
 						break;
 					}
-					mSpeed -= 0.01;
+					mSpeed -= 0.02;
 
 					if (mScrollDirection) {
 						mGraphstart -= mSpeed;
@@ -402,7 +404,7 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 					}
 
 					try {
-						TimeUnit.MILLISECONDS.sleep(2);
+						TimeUnit.MILLISECONDS.sleep(1);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
@@ -426,14 +428,16 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 			mDrag = true;
 			evX1 = event.getX(0);
 			mDragX = evX1 - mGraphstart;
-			doubleClick(event);
+
+			doubleClick(event.getX(0), event.getY(0),
+					System.currentTimeMillis());
+
 			for (int i = 0; i < mPreviousTime.length; i++) {
 				mPreviousTime[i] = System.currentTimeMillis();
 			}
 
 			for (int i = 0; i < mPreviousTouches.length; i++) {
-				mPreviousTouches[i][0] = event.getX();
-				mPreviousTouches[i][1] = event.getY();
+				mPreviousTouches[i] = event.getX();
 
 			}
 			break;
@@ -445,8 +449,7 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 				mDiffrentX = Math.abs(event.getX(0) - event.getX(1));
 				mDiffrentY = Math.abs(event.getY(0) - event.getY(1)) + 3;
 				staticX = (event.getX(0) + event.getX(1)) / 2;
-				staticDist = (Math.abs((mGraphstart - staticX)
-						/ mRealhWidthRate));
+				staticDist = (staticX - mGraphstart) / mRealhWidthRate;
 			}
 			break;
 
@@ -460,8 +463,8 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 
 			mDrag = false;
 
-			double difDistX = mPreviousTouches[0][0]
-					- mPreviousTouches[mPreviousTouches.length - 1][0];
+			double difDistX = mPreviousTouches[0]
+					- mPreviousTouches[mPreviousTouches.length - 1];
 
 			if (difDistX > 0)
 				mScrollDirection = false;
@@ -471,9 +474,10 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 			difDistX = Math.abs(difDistX);
 
 			long difTime = mPreviousTime[0]
-					- mPreviousTime[mPreviousTime.length - 1];
+					- mPreviousTime[mPreviousTime.length
+							- mPreviousTouches.length];
 			if (difTime != 0)
-				mSpeed = (float) (difDistX / difTime);
+				mSpeed = (float) (difDistX / mPreviousTouches.length);
 			mScrollThreadCheck = true;
 
 			break;
@@ -493,12 +497,10 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 				evX1 = event.getX(0);
 
 				for (int i = 0; i < (mPreviousTouches.length - 1); i++) {
-					mPreviousTouches[i + 1][0] = mPreviousTouches[i][0];
-					mPreviousTouches[i + 1][1] = mPreviousTouches[i][1];
+					mPreviousTouches[i + 1] = mPreviousTouches[i];
 				}
 
-				mPreviousTouches[0][0] = event.getX();
-				mPreviousTouches[0][1] = event.getY();
+				mPreviousTouches[0] = event.getX();
 
 				for (int i = 0; i < (mPreviousTime.length - 1); i++) {
 					mPreviousTime[i + 1] = mPreviousTime[i];
@@ -534,7 +536,11 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 					mRealhWidthRate = mRealhWidthRateTemp * realDiffrentX;
 				else
 					mRealhHeightRate = mRealhHeightRateTemp * realDiffrentY;
+
 				mGraphstart = staticX - staticDist * mRealhWidthRate;
+
+				if (mGraphstart > 0)
+					mGraphstart = 0;
 
 				break;
 			}
@@ -544,21 +550,45 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 		return true;
 	}
 
-	private void doubleClick(MotionEvent event) {
-		boolean time = (System.currentTimeMillis() - mPreviousTime1) < mMaxTime;
-		boolean distant = ((event.getX() - mPreviousTouchX1) < mMaxDistant)
-				&& ((event.getY() - mPrevTouchY) < mMaxDistant);
+	private void doubleClick(float x, float y, long time) {
+		boolean timeBool = (time - mPreviousTime1) < mMaxTime;
+		boolean distant = (Math.abs(x - mPreviousTouchX1) < mMaxDistant)
+				&& (Math.abs(y - mPrevTouchY) < mMaxDistant);
 
-		if (time && distant) {
+		// float iks = event.getX(0);
+
+		if (timeBool && distant) {
+
+			// float wqer = (x - mGraphstart) / mRealhWidthRate;
+
+			// mGraphstart = event.getX(0) - (event.getX(0) - mGraphstart)
+			// / mRealhWidthRate * 10;
+			// final String TAGG = "хуйня";
+			//
+			// Log.v(TAG, " \n");
+			// Log.v(TAG, "iks " + iks);
+			// Log.v(TAG, "mGraphstart " + mGraphstart);
+			// Log.v(TAG, "mRealhWidthRate " + mRealhWidthRate);
+			// Log.v(TAG, "wqer " + wqer);
+
 			mRealhHeightRate = mGraphHeightRate;
 			mRealhHeightRateTemp = mGraphHeightRate;
 			mRealhWidthRate = 10;
 			mRealhWidthRateTemp = 10;
+
+			// mGraphstart = x - wqer;
+			//
+			// Log.v(TAG, " \n");
+			// Log.v(TAG, "iks " + iks);
+			// Log.v(TAG, "mGraphstart " + mGraphstart);
+			// Log.v(TAG, "mRealhWidthRate " + mRealhWidthRate);
+			// Log.v(TAG, "wqer " + wqer);
+
 		}
 
-		mPreviousTime1 = System.currentTimeMillis();
-		mPreviousTouchX1 = event.getX();
-		mPrevTouchY = event.getY();
+		mPreviousTime1 = time;
+		mPreviousTouchX1 = x;
+		mPrevTouchY = y;
 
 	}
 

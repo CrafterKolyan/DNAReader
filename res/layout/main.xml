@@ -5,66 +5,31 @@
     android:gravity="top" 
     android:id="@+id/main">
     
-   
-
    <ru.project.dnareader.Graphic
        android:id="@+id/mySurface"
        android:layout_width="match_parent"
-       
        android:layout_height="20dp"
        android:layout_alignParentBottom="true"
-       android:layout_below="@+id/button1"
+       android:layout_below="@+id/button2"
        android:layout_centerHorizontal="true"
-       android:layout_margin="10dp"
-        />
-   
- 	<Button
-        android:id="@+id/button1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Построить" />
+       android:layout_margin="10dp" />
 
    <Button
-       android:id="@+id/button123"
+       android:id="@+id/button2"
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
        android:layout_alignParentTop="true"
        android:layout_marginLeft="18dp"
-       android:layout_toRightOf="@+id/button1"
+       android:layout_toRightOf="@+id/button123"
        android:text="В начало" />
 
-   <TextView
-       android:id="@+id/textView2"
+   <Button
+       android:id="@+id/button1"
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
        android:layout_alignParentTop="true"
-       android:layout_toRightOf="@+id/button123"
-       android:text="some text" />
-
-   <TextView
-       android:id="@+id/textView1"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:layout_below="@+id/textView2"
-       android:layout_toRightOf="@+id/button123"
-       android:text="some text" />
-
-   <TextView
-       android:id="@+id/textView3"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:layout_alignParentTop="true"
-       android:layout_marginLeft="52dp"
-       android:layout_toRightOf="@+id/textView2"
-       android:text="TextView" />
-
-   <TextView
-       android:id="@+id/textView4"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:layout_alignBaseline="@+id/button123"
-       android:layout_alignBottom="@+id/button123"
-       android:layout_alignLeft="@+id/textView3"
-       android:text="TextView" />
+       android:layout_marginLeft="11dp"
+       android:layout_toRightOf="@+id/button2"
+       android:text="загрузить из интернета" />
 
 </RelativeLayout>
