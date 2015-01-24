@@ -26,6 +26,9 @@ public class MainActivity extends Activity {
 		// ((Graphic) findViewById(R.id.mySurface)).newData(new File(
 		// "/storage/emulated/0/Download/GJA1-19-II-1-ex1_GJA1-1F_A2.ab1"));
 
+		// ((Graphic) findViewById(R.id.mySurface)).newData(new File(
+		// "/storage/emulated/0/Download/2.abi"));
+
 		btn1 = (Button) findViewById(R.id.button1);
 
 		btn1.setOnClickListener(new View.OnClickListener() {

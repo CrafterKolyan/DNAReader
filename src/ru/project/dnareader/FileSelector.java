@@ -7,6 +7,7 @@ import java.util.Collections;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -23,6 +24,8 @@ public class FileSelector {
 
 	/** The list of files and folders which you can choose from */
 	private ListView mFileListView;
+
+	// private static final String TAG = "DnaReader";
 
 	/**
 	 * Indicates current location in the directory structure displayed in the
@@ -200,6 +203,8 @@ public class FileSelector {
 	/** Simple wrapper around the Dialog.dissmiss() method. */
 	public void dismiss() {
 		mDialog.dismiss();
+
+		Log.v(TAG, "FileSelector parh: " + finalItimePath);
 
 		graphView.newData(new File(finalItimePath));
 

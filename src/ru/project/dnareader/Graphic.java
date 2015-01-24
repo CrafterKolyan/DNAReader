@@ -102,7 +102,7 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 
 	public void newData(File file) {
 
-		mCheckHeightRate = true;
+		Log.v(TAG, "Graphic newData");
 
 		try {
 
@@ -120,11 +120,21 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 			Log.v(TAG, "base: " + mBaseCallsX[mBaseCallsX.length - 1]);
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
+			// Log.v(TAG, "everything is bad");
+			Log.v(TAG, e.getMessage());
+			Log.v(TAG, "Exception ", e);
+			return;
 		} catch (IllegalSymbolException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
+			// Log.v(TAG, "everything is bad");
+			// e.getMessage();
+			Log.v(TAG, e.getMessage());
+			Log.v(TAG, "Exception ", e);
+			return;
 		}
 		mIsDrawing = true;
+		mCheckHeightRate = true;
 
 	}
 
@@ -196,7 +206,8 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 		try {
 			mDrawThread.join();
 		} catch (InterruptedException e) {
-			Log.e(TAG, "Exception:", e);
+			Log.v(TAG, e.getMessage());
+			Log.v(TAG, "Exception ", e);
 		}
 	}
 
@@ -406,7 +417,8 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 					try {
 						TimeUnit.MILLISECONDS.sleep(1);
 					} catch (InterruptedException e) {
-						e.printStackTrace();
+						Log.v(TAG, e.getMessage());
+						Log.v(TAG, "Exception ", e);
 					}
 				}
 			}

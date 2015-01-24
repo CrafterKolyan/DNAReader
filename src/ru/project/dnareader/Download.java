@@ -9,7 +9,6 @@ import java.net.URLConnection;
 
 import android.app.Activity;
 import android.os.AsyncTask;
-import android.util.Log;
 //import android.os.Bundle;
 //import android.view.View;
 //import android.view.View.OnClickListener;
@@ -41,7 +40,8 @@ public class Download extends Activity {
 	// }
 
 	private void startDownload() {
-		String url = "http://skib6.ru:21180/dna/info/1";
+		// String url = "http://skib6.ru:21180/dna/info/1";
+		String url = "http://www.ncbi.nlm.nih.gov/blast/Blast.cgi?QUERY=ACCACAGTCGGAGATAATAGGACGAAGTAANACTGACGNGATACTTTCCCGAGCTGAAGTTAACAAATGCACCTGGTTCTTTTACTAAGTGTTCAAATACCAGTGAACTTAAAGAATTTGTCAATCCTAGCCTTCCAAGAGAAGAAAAAGAAGAGAAACTAGAAACAGTTAAAGTGTCTAATAATGCTGAAGACCCCAAAGATCTCATGTTAAGTGGAGAAAGGGTTTTGCAAACTGAAAGATCTGTAGAGAGTAGCAGTATTTCATTGGTACCTGGTACTGATTATGGCACTCAGGAAAGTATCTCGTTACTGGAAGTTAGCACTCTAGGGAAGGCAAAAACAGAACCAAATAAATGTGTGAGTCAGTGTGCAGCATTTGAAAACCCCAAGGGACTAATTCATGGTTGTTCCAAAGATAATAGAAATGACACAGAAGGCTTTAAGTATCCATTGGGACATGAAGTTAACCACAGTCGGGAAACAAGCATAGAAATGGAAGAAAGTGAACTTGATGCTCAGTATTTGCAGAATACATTCAAGGTTTCAAAGCGCCAGTCATTTGCTCTGTTTTCAAATCCAGGAAATGCAGAAGAGGAATGTGCAACATTCTCTGCCCACGTCATCGCTGGCCCCTTGCGAAGAGGATATTCTACGGATCGTAATCG&DATABASE=nr&PROGRAM=blastn&FILTER=L&EXPECT=0.01&FORMAT_TYPE=XML&NCBI_GI=on&HITLIST_SIZE=10&CMD=Put";
 		new DownloadFileAsync().execute(url);
 	}
 
@@ -65,11 +65,11 @@ public class Download extends Activity {
 				conexion.connect();
 
 				int lenghtOfFile = conexion.getContentLength();
-				Log.d("ANDRO_ASYNC", "Lenght of file: " + lenghtOfFile);
+				// Log.d("ANDRO_ASYNC", "Lenght of file: " + lenghtOfFile);
 
 				InputStream input = new BufferedInputStream(url.openStream());
 				OutputStream output = new FileOutputStream(
-						"/storage/emulated/0/Download/2.abi");
+						"/storage/emulated/0/DNAreader/1234");
 
 				byte data[] = new byte[1024];
 
