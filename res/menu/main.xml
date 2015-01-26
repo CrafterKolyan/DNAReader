@@ -5,8 +5,7 @@
             android:id="@+id/loadFile"
             android:showAsAction="always"
             android:icon="@drawable/ic_menu_open_file"
-            android:title="Загрузить файл"/>
-        
+            android:title="Загрузить файл"/>   
 
         
  </menu>

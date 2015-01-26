@@ -40,7 +40,7 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 	private long mPreviousTime1 = 0;
 	private float mPreviousTouchX1 = 0;
 	private float mPrevTouchY = 0;
-	private long mMaxTime = 300;
+	private long mMaxTime = 500;
 	private float mMaxDistant = 30;
 	private int[] mBaseCallsX = null;
 	private char[] mBaseCallsLetters = null;
@@ -396,7 +396,7 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 						mScrollThreadCheck = false;
 						break;
 					}
-					mSpeed -= 0.02;
+					mSpeed -= 0.03;
 
 					if (mScrollDirection) {
 						mGraphstart -= mSpeed;
@@ -405,6 +405,7 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 					}
 
 					if (mGraphstart > 0) {
+						mGraphstart = 0;
 						mScrollThreadCheck = false;
 						break;
 					}
@@ -548,6 +549,12 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 					mRealhWidthRate = mRealhWidthRateTemp * realDiffrentX;
 				else
 					mRealhHeightRate = mRealhHeightRateTemp * realDiffrentY;
+
+				if (mRealhWidthRate > 40)
+					mRealhWidthRate = 40;
+
+				if (mRealhWidthRate < 1)
+					mRealhWidthRate = 1;
 
 				mGraphstart = staticX - staticDist * mRealhWidthRate;
 

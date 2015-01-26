@@ -23,7 +23,8 @@ public class MainActivity extends Activity {
 
 		setContentView(R.layout.main);
 
-		// ((Graphic) findViewById(R.id.mySurface)).newData(new File(
+		// ((Graphic) findViewById(R.id.mySurface))
+		// .newData(new File(
 		// "/storage/emulated/0/Download/GJA1-19-II-1-ex1_GJA1-1F_A2.ab1"));
 
 		// ((Graphic) findViewById(R.id.mySurface)).newData(new File(
@@ -46,6 +47,9 @@ public class MainActivity extends Activity {
 				((Graphic) findViewById(R.id.mySurface)).graphToBegin();
 			}
 		});
+
+		btn1.setAlpha(0);
+		btn2.setAlpha(0);
 
 	}
 
