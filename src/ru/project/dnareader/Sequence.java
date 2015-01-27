@@ -29,7 +29,6 @@ public class Sequence {
 			color = Color.RED;
 			paint.setColor(Color.RED);
 		}
-		// Log.v("TAG", "color" + color);
 
 		paint.setStrokeWidth(5);
 		paint.setStyle(Paint.Style.STROKE);
@@ -38,7 +37,6 @@ public class Sequence {
 
 	public void trace(int[] trace) {
 		this.trace = trace;
-		// avtrace();
 		max();
 	}
 

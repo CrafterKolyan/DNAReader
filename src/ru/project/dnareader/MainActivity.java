@@ -7,7 +7,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 public class MainActivity extends Activity {
 
@@ -27,35 +26,45 @@ public class MainActivity extends Activity {
 		// .newData(new File(
 		// "/storage/emulated/0/Download/GJA1-19-II-1-ex1_GJA1-1F_A2.ab1"));
 
-		// ((Graphic) findViewById(R.id.mySurface)).newData(new File(
-		// "/storage/emulated/0/Download/2.abi"));
+		((Button) findViewById(R.id.download))
+				.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						new Download("http://skib6.ru:21180/dna/info/1",
+								"/storage/emulated/0/DNAreader/1234567.txt");
+						// new Download(
+						// "http://www.ncbi.nlm.nih.gov/blast/Blast.cgi?QUERY=ACCACAGTCGGAGATAATAGGACGAAGTAANACTGACGNGATACTTTCCCGAGCTGAAGTTAACAAATGCACCTGGTTCTTTTACTAAGTGTTCAAATACCAGTGAACTTAAAGAATTTGTCAATCCTAGCCTTCCAAGAGAAGAAAAAGAAGAGAAACTAGAAACAGTTAAAGTGTCTAATAATGCTGAAGACCCCAAAGATCTCATGTTAAGTGGAGAAAGGGTTTTGCAAACTGAAAGATCTGTAGAGAGTAGCAGTATTTCATTGGTACCTGGTACTGATTATGGCACTCAGGAAAGTATCTCGTTACTGGAAGTTAGCACTCTAGGGAAGGCAAAAACAGAACCAAATAAATGTGTGAGTCAGTGTGCAGCATTTGAAAACCCCAAGGGACTAATTCATGGTTGTTCCAAAGATAATAGAAATGACACAGAAGGCTTTAAGTATCCATTGGGACATGAAGTTAACCACAGTCGGGAAACAAGCATAGAAATGGAAGAAAGTGAACTTGATGCTCAGTATTTGCAGAATACATTCAAGGTTTCAAAGCGCCAGTCATTTGCTCTGTTTTCAAATCCAGGAAATGCAGAAGAGGAATGTGCAACATTCTCTGCCCACGTCATCGCTGGCCCCTTGCGAAGAGGATATTCTACGGATCGTAATCG&DATABASE=nr&PROGRAM=blastn&FILTER=L&EXPECT=0.01&FORMAT_TYPE=XML&NCBI_GI=on&HITLIST_SIZE=10&CMD=Put",
+						// "/storage/emulated/0/DNAreader/1234567.txt");
+					}
+				});
 
-		btn1 = (Button) findViewById(R.id.button1);
+		((Button) findViewById(R.id.toBegin))
+				.setOnClickListener(new View.OnClickListener() {
 
-		btn1.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				new Download();
-			}
-		});
+					@Override
+					public void onClick(View v) {
+						((Graphic) findViewById(R.id.mySurface)).graphToBegin();
 
-		btn2 = (Button) findViewById(R.id.button2);
-		btn2.setOnClickListener(new View.OnClickListener() {
+					}
+				});
+		((Button) findViewById(R.id.dialog))
+				.setOnClickListener(new View.OnClickListener() {
 
-			@Override
-			public void onClick(View v) {
-				((Graphic) findViewById(R.id.mySurface)).graphToBegin();
-			}
-		});
+					@Override
+					public void onClick(View arg0) {
+						(new MyDialog("все очень плохо")).show(
+								getFragmentManager(), "");
 
-		btn1.setAlpha(0);
-		btn2.setAlpha(0);
+					}
+				});
+
+		// btn1.setAlpha(0);
+		// btn2.setAlpha(0);
 
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-
 		switch (item.getItemId()) {
 		case R.id.loadFile:
 			showFileSelector();
@@ -78,19 +87,6 @@ public class MainActivity extends Activity {
 		final FileSelector fileSelector = new FileSelector(MainActivity.this,
 				mFileFilter, (Graphic) findViewById(R.id.mySurface));
 		fileSelector.showDialogs();
-	}
-
-	public static void continuee(String ABIfilePath) {
-
-	}
-
-	public void setText(final TextView text, final String value) {
-		runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				text.setText(value);
-			}
-		});
 	}
 
 }

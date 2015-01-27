@@ -15,21 +15,25 @@
        android:layout_margin="10dp" />
 
    <Button
-       android:id="@+id/button2"
+       android:id="@+id/download"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="загрузить" />
+
+   <Button
+       android:id="@+id/toBegin"
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
        android:layout_alignParentTop="true"
-       android:layout_marginLeft="18dp"
-       android:layout_toRightOf="@+id/button123"
+       android:layout_centerHorizontal="true"
        android:text="В начало" />
 
    <Button
-       android:id="@+id/button1"
+       android:id="@+id/dialog"
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
        android:layout_alignParentTop="true"
-       android:layout_marginLeft="11dp"
-       android:layout_toRightOf="@+id/button2"
-       android:text="загрузить из интернета" />
+       android:layout_alignRight="@+id/mySurface"
+       android:text="диалог" />
 
 </RelativeLayout>

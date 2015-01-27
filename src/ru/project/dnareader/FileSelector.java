@@ -25,8 +25,6 @@ public class FileSelector {
 	/** The list of files and folders which you can choose from */
 	private ListView mFileListView;
 
-	// private static final String TAG = "DnaReader";
-
 	/**
 	 * Indicates current location in the directory structure displayed in the
 	 * dialog.
