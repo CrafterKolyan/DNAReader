@@ -24,6 +24,9 @@ import android.view.SurfaceView;
 
 public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 
+	public static float columnWidth = 20;
+	public static int[] mBaseCallsX = null;
+
 	private DrawThread mDrawThread;
 	private ScrollThread mScrollThread;
 	private static final String TAG = "DnaReader";
@@ -36,13 +39,12 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 	private float mGraphstart = 0;
 	private float mGraphWidth = 0;
 	private float[] mPreviousTouches = new float[5];
-	private long[] mPreviousTime = new long[10];
-	private long mPreviousTime1 = 0;
+	private long mPreviousTime = 0;
+	// private long mPreviousTime1 = 0;
 	private float mPreviousTouchX1 = 0;
 	private float mPrevTouchY = 0;
 	private long mMaxTime = 500;
 	private float mMaxDistant = 30;
-	private int[] mBaseCallsX = null;
 	private char[] mBaseCallsLetters = null;
 	private boolean mIsDrawing = false;
 	private Sequence mSecA = new Sequence(DNATools.a());
@@ -262,19 +264,19 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 
 		}
 
-		private void drawPeaks() {
+		private void drawingPeaks() {
 			Paint paint = new Paint();
 			paint.setColor(Color.parseColor("#40FF0000"));
 
 			for (int i = 0; i < mDoublePeaks.length; i++) {
 				mCanvas.drawRect(mGraphstart + mDoublePeaks[i]
-						* mRealhWidthRate - 15, 50, mGraphstart
-						+ mDoublePeaks[i] * mRealhWidthRate + 15,
+						* mRealhWidthRate - columnWidth, 50, mGraphstart
+						+ mDoublePeaks[i] * mRealhWidthRate + columnWidth,
 						mCanvasHeight, paint);
 			}
 		}
 
-		private void drawSymbols() {
+		private void drawingSymbols() {
 			Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 			paint.setColor(Color.YELLOW);
 
@@ -287,7 +289,7 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 			int begging = Math.abs((int) (mGraphstart / mRealhWidthRate)) - 20;
 			int end = (int) (begging + mCanvasWidth / mRealhWidthRate) + 20;
 
-			for (int i = 0; i < mBaseCallsLetters.length; i++) {
+			for (int i = 0; i < mBaseCallsX.length; i++) {
 				if (mBaseCallsX[i] > begging && mBaseCallsX[i] < end) {
 					paint.reset();
 					paint.setTextSize(50);
@@ -314,7 +316,22 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 				} else if (mBaseCallsLetters[i] >= end)
 					return;
 			}
+		}
 
+		private void drawingMutations() {
+			Paint paint = new Paint();
+			paint.setColor(Color.parseColor("#444731"));
+
+			Vector<Mutation> mutations = Download.mutations;
+
+			if (mutations == null)
+				return;
+
+			for (Mutation mutation : mutations) {
+				mCanvas.drawRect(mGraphstart + mutation.val * mRealhWidthRate
+						- columnWidth, 50, mGraphstart + mutation.val
+						* mRealhWidthRate + columnWidth, mCanvasHeight, paint);
+			}
 		}
 
 		@Override
@@ -355,9 +372,10 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 							mRealhHeightRateTemp = mGraphHeightRate;
 						}
 
-						drawSymbols();
+						drawingSymbols();
 
-						drawPeaks();
+						drawingPeaks();
+						drawingMutations();
 
 						drawingGraph(mSecA.trace, DNATools.a());
 						drawingGraph(mSecC.trace, DNATools.c());
@@ -396,7 +414,7 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 						mScrollThreadCheck = false;
 						break;
 					}
-					mSpeed -= 0.03;
+					mSpeed -= 0.04;
 
 					if (mScrollDirection) {
 						mGraphstart -= mSpeed;
@@ -445,9 +463,7 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 			doubleClick(event.getX(0), event.getY(0),
 					System.currentTimeMillis());
 
-			for (int i = 0; i < mPreviousTime.length; i++) {
-				mPreviousTime[i] = System.currentTimeMillis();
-			}
+			// mPreviousTime = System.currentTimeMillis();
 
 			for (int i = 0; i < mPreviousTouches.length; i++) {
 				mPreviousTouches[i] = event.getX();
@@ -486,12 +502,14 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 
 			difDistX = Math.abs(difDistX);
 
-			long difTime = mPreviousTime[0]
-					- mPreviousTime[mPreviousTime.length
-							- mPreviousTouches.length];
-			if (difTime != 0)
-				mSpeed = (float) (difDistX / mPreviousTouches.length);
+			// long difTime = mPreviousTime[0]
+			// - mPreviousTime[mPreviousTime.length
+			// - mPreviousTouches.length];
+			// if (difTime != 0)
+			mSpeed = (float) (difDistX / mPreviousTouches.length);
 			mScrollThreadCheck = true;
+
+			mutationClick(event.getX(0));
 
 			break;
 
@@ -515,11 +533,12 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 
 				mPreviousTouches[0] = event.getX();
 
-				for (int i = 0; i < (mPreviousTime.length - 1); i++) {
-					mPreviousTime[i + 1] = mPreviousTime[i];
-				}
+				// for (int i = 0; i < (mPreviousTime.length - 1); i++) {
+				// mPreviousTime[i + 1] = mPreviousTime[i];
+				// }
 
-				mPreviousTime[0] = System.currentTimeMillis();
+				// mPreviousTime = System.currentTimeMillis();
+
 				mGraphstart = (evX1 - mDragX);
 
 				if (mGraphstart > 100) {
@@ -550,11 +569,11 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 				else
 					mRealhHeightRate = mRealhHeightRateTemp * realDiffrentY;
 
-				if (mRealhWidthRate > 40)
-					mRealhWidthRate = 40;
+				if (mRealhWidthRate > 70)
+					mRealhWidthRate = 70;
 
-				if (mRealhWidthRate < 1)
-					mRealhWidthRate = 1;
+				if (mRealhWidthRate < 2)
+					mRealhWidthRate = 2;
 
 				mGraphstart = staticX - staticDist * mRealhWidthRate;
 
@@ -569,8 +588,23 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 		return true;
 	}
 
+	private void mutationClick(float x) {
+		Vector<Mutation> mutations = Download.mutations;
+
+		if (mutations == null)
+			return;
+
+		for (Mutation i : mutations) {
+			if ((i.val * mRealhWidthRate - columnWidth) + mGraphstart < x
+					&& (i.val * mRealhWidthRate + columnWidth) + mGraphstart > x) {
+				(new MyDialog(i.info)).show(MainActivity.fragManager, "");
+				return;
+			}
+		}
+	}
+
 	private void doubleClick(float x, float y, long time) {
-		boolean timeBool = (time - mPreviousTime1) < mMaxTime;
+		boolean timeBool = (time - mPreviousTime) < mMaxTime;
 		boolean distant = (Math.abs(x - mPreviousTouchX1) < mMaxDistant)
 				&& (Math.abs(y - mPrevTouchY) < mMaxDistant);
 
@@ -605,7 +639,7 @@ public class Graphic extends SurfaceView implements SurfaceHolder.Callback {
 
 		}
 
-		mPreviousTime1 = time;
+		mPreviousTime = time;
 		mPreviousTouchX1 = x;
 		mPrevTouchY = y;
 

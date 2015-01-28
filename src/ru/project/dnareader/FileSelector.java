@@ -14,30 +14,16 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 
-//import android.widget.Spinner;
-
-/**
- * Create the file selection dialog. This class will create a custom dialog for
- * file selection which can be used to save files.
- */
 public class FileSelector {
 
-	/** The list of files and folders which you can choose from */
 	private ListView mFileListView;
 
-	/**
-	 * Indicates current location in the directory structure displayed in the
-	 * dialog.
-	 */
 	private File mCurrentLocation;
 
 	private String finalItimePath;
 
 	private static final String TAG = "DnaReader";
 
-	/**
-	 * The file selector dialog.
-	 */
 	private final Dialog mDialog;
 
 	private String[] fileFilters;
@@ -45,18 +31,6 @@ public class FileSelector {
 	private Context mContext;
 	private Graphic graphView;
 
-	/**
-	 * Constructor that creates the file selector dialog.
-	 * 
-	 * @param context
-	 *            The current context.
-	 * @param operation
-	 *            LOAD - to load file / SAVE - to save file
-	 * @param onHandleFileListener
-	 *            Notified after pressing the save or load button.
-	 * @param fileFilters
-	 *            Array with filters
-	 */
 	public FileSelector(final Context context, final String[] fileFilters,
 			Graphic graphView) {
 		this.fileFilters = fileFilters;
@@ -78,10 +52,6 @@ public class FileSelector {
 
 	}
 
-	/**
-	 * This method prepares the mFileListView
-	 * 
-	 */
 	private void prepareFilesList() {
 		mFileListView = (ListView) mDialog.findViewById(R.id.fileList);
 
@@ -113,15 +83,6 @@ public class FileSelector {
 		return false;
 	}
 
-	/**
-	 * The method that fills the list with a directories contents.
-	 * 
-	 * @param location
-	 *            Indicates the directory whose contents should be displayed in
-	 *            the dialog.
-	 * @param fitlesFilter
-	 *            The filter specifies the type of file to be displayed
-	 */
 	private void makeList(final File location) {
 		final ArrayList<FileData> fileList = new ArrayList<FileData>();
 		final String parentLocation = location.getParent();
@@ -150,21 +111,6 @@ public class FileSelector {
 		}
 	}
 
-	/**
-	 * Handle the file list item selection.
-	 * 
-	 * Change the directory on the list or change the name of the saved file if
-	 * the user selected a file.
-	 * 
-	 * @param parent
-	 *            First parameter of the onItemClick() method of
-	 *            OnItemClickListener. It's a value of text property of the
-	 *            item.
-	 * @param position
-	 *            Third parameter of the onItemClick() method of
-	 *            OnItemClickListener. It's the index on the list of the
-	 *            selected item.
-	 */
 	private void onItemSelect(final AdapterView<?> parent, final int position) {
 		final String itemText = ((FileData) parent.getItemAtPosition(position))
 				.getFileName();
@@ -179,7 +125,6 @@ public class FileSelector {
 			mCurrentLocation = itemLocation;
 			makeList(mCurrentLocation);
 		} else if (itemLocation.isFile()) {
-			Toast.makeText(mContext, itemPath, Toast.LENGTH_SHORT).show();
 			finalItimePath = itemPath;
 			dismiss();
 		}
@@ -189,7 +134,6 @@ public class FileSelector {
 		return mCurrentLocation;
 	}
 
-	/** Simple wrapper around the Dialog.show() method. */
 	public void show() {
 		mDialog.show();
 	}
@@ -198,13 +142,15 @@ public class FileSelector {
 		return finalItimePath;
 	}
 
-	/** Simple wrapper around the Dialog.dissmiss() method. */
 	public void dismiss() {
 		mDialog.dismiss();
 
 		Log.v(TAG, "FileSelector parh: " + finalItimePath);
 
 		graphView.newData(new File(finalItimePath));
+
+		new Download("http://skib6.ru:21180/dna/info/1",
+				"/storage/emulated/0/DNAreader/1234567.txt", mContext);
 
 	}
 }

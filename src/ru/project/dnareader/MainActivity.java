@@ -1,11 +1,11 @@
 package ru.project.dnareader;
 
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 
 public class MainActivity extends Activity {
@@ -15,6 +15,7 @@ public class MainActivity extends Activity {
 	boolean status = false;
 	Context context;
 	private static final String TAG = "DnaReader";
+	public static FragmentManager fragManager = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -22,45 +23,9 @@ public class MainActivity extends Activity {
 
 		setContentView(R.layout.main);
 
-		// ((Graphic) findViewById(R.id.mySurface))
-		// .newData(new File(
-		// "/storage/emulated/0/Download/GJA1-19-II-1-ex1_GJA1-1F_A2.ab1"));
+		fragManager = getFragmentManager();
 
-		((Button) findViewById(R.id.download))
-				.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						new Download("http://skib6.ru:21180/dna/info/1",
-								"/storage/emulated/0/DNAreader/1234567.txt");
-						// new Download(
-						// "http://www.ncbi.nlm.nih.gov/blast/Blast.cgi?QUERY=ACCACAGTCGGAGATAATAGGACGAAGTAANACTGACGNGATACTTTCCCGAGCTGAAGTTAACAAATGCACCTGGTTCTTTTACTAAGTGTTCAAATACCAGTGAACTTAAAGAATTTGTCAATCCTAGCCTTCCAAGAGAAGAAAAAGAAGAGAAACTAGAAACAGTTAAAGTGTCTAATAATGCTGAAGACCCCAAAGATCTCATGTTAAGTGGAGAAAGGGTTTTGCAAACTGAAAGATCTGTAGAGAGTAGCAGTATTTCATTGGTACCTGGTACTGATTATGGCACTCAGGAAAGTATCTCGTTACTGGAAGTTAGCACTCTAGGGAAGGCAAAAACAGAACCAAATAAATGTGTGAGTCAGTGTGCAGCATTTGAAAACCCCAAGGGACTAATTCATGGTTGTTCCAAAGATAATAGAAATGACACAGAAGGCTTTAAGTATCCATTGGGACATGAAGTTAACCACAGTCGGGAAACAAGCATAGAAATGGAAGAAAGTGAACTTGATGCTCAGTATTTGCAGAATACATTCAAGGTTTCAAAGCGCCAGTCATTTGCTCTGTTTTCAAATCCAGGAAATGCAGAAGAGGAATGTGCAACATTCTCTGCCCACGTCATCGCTGGCCCCTTGCGAAGAGGATATTCTACGGATCGTAATCG&DATABASE=nr&PROGRAM=blastn&FILTER=L&EXPECT=0.01&FORMAT_TYPE=XML&NCBI_GI=on&HITLIST_SIZE=10&CMD=Put",
-						// "/storage/emulated/0/DNAreader/1234567.txt");
-					}
-				});
-
-		((Button) findViewById(R.id.toBegin))
-				.setOnClickListener(new View.OnClickListener() {
-
-					@Override
-					public void onClick(View v) {
-						((Graphic) findViewById(R.id.mySurface)).graphToBegin();
-
-					}
-				});
-		((Button) findViewById(R.id.dialog))
-				.setOnClickListener(new View.OnClickListener() {
-
-					@Override
-					public void onClick(View arg0) {
-						(new MyDialog("все очень плохо")).show(
-								getFragmentManager(), "");
-
-					}
-				});
-
-		// btn1.setAlpha(0);
-		// btn2.setAlpha(0);
-
+		showFileSelector();
 	}
 
 	@Override
@@ -69,6 +34,10 @@ public class MainActivity extends Activity {
 		case R.id.loadFile:
 			showFileSelector();
 			break;
+		case R.id.blastSearch:
+			new Download("http://skib6.ru:21180/dna/info/1",
+					"/storage/emulated/0/DNAreader/1234567.txt",
+					MainActivity.this);
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -90,3 +59,43 @@ public class MainActivity extends Activity {
 	}
 
 }
+
+// ((Graphic) findViewById(R.id.mySurface))
+// .newData(new File(
+// "/storage/emulated/0/Download/GJA1-19-II-1-ex1_GJA1-1F_A2.ab1"));
+
+// ((Button) findViewById(R.id.download))
+// .setOnClickListener(new View.OnClickListener() {
+// @Override
+// public void onClick(View v) {
+// new Download("http://skib6.ru:21180/dna/info/1",
+// "/storage/emulated/0/DNAreader/1234567.txt",
+// MainActivity.this);
+// // new Download(
+// //
+// "http://www.ncbi.nlm.nih.gov/blast/Blast.cgi?QUERY=ACCACAGTCGGAGATAATAGGACGAAGTAANACTGACGNGATACTTTCCCGAGCTGAAGTTAACAAATGCACCTGGTTCTTTTACTAAGTGTTCAAATACCAGTGAACTTAAAGAATTTGTCAATCCTAGCCTTCCAAGAGAAGAAAAAGAAGAGAAACTAGAAACAGTTAAAGTGTCTAATAATGCTGAAGACCCCAAAGATCTCATGTTAAGTGGAGAAAGGGTTTTGCAAACTGAAAGATCTGTAGAGAGTAGCAGTATTTCATTGGTACCTGGTACTGATTATGGCACTCAGGAAAGTATCTCGTTACTGGAAGTTAGCACTCTAGGGAAGGCAAAAACAGAACCAAATAAATGTGTGAGTCAGTGTGCAGCATTTGAAAACCCCAAGGGACTAATTCATGGTTGTTCCAAAGATAATAGAAATGACACAGAAGGCTTTAAGTATCCATTGGGACATGAAGTTAACCACAGTCGGGAAACAAGCATAGAAATGGAAGAAAGTGAACTTGATGCTCAGTATTTGCAGAATACATTCAAGGTTTCAAAGCGCCAGTCATTTGCTCTGTTTTCAAATCCAGGAAATGCAGAAGAGGAATGTGCAACATTCTCTGCCCACGTCATCGCTGGCCCCTTGCGAAGAGGATATTCTACGGATCGTAATCG&DATABASE=nr&PROGRAM=blastn&FILTER=L&EXPECT=0.01&FORMAT_TYPE=XML&NCBI_GI=on&HITLIST_SIZE=10&CMD=Put",
+// // "/storage/emulated/0/DNAreader/1234567.txt");
+// }
+// });
+//
+// ((Button) findViewById(R.id.toBegin))
+// .setOnClickListener(new View.OnClickListener() {
+//
+// @Override
+// public void onClick(View v) {
+// ((Graphic) findViewById(R.id.mySurface)).graphToBegin();
+//
+// }
+// });
+// ((Button) findViewById(R.id.dialog))
+// .setOnClickListener(new View.OnClickListener() {
+//
+// @Override
+// public void onClick(View arg0) {
+// (new MyDialog("все очень плохо")).show(fragManager, "");
+//
+// }
+// });
+
+// btn1.setAlpha(0);
+// btn2.setAlpha(0);

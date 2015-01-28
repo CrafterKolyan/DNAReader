@@ -10,30 +10,8 @@
        android:layout_width="match_parent"
        android:layout_height="20dp"
        android:layout_alignParentBottom="true"
-       android:layout_below="@+id/button2"
+       android:layout_alignParentTop="true"
        android:layout_centerHorizontal="true"
        android:layout_margin="10dp" />
-
-   <Button
-       android:id="@+id/download"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:text="загрузить" />
-
-   <Button
-       android:id="@+id/toBegin"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:layout_alignParentTop="true"
-       android:layout_centerHorizontal="true"
-       android:text="В начало" />
-
-   <Button
-       android:id="@+id/dialog"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:layout_alignParentTop="true"
-       android:layout_alignRight="@+id/mySurface"
-       android:text="диалог" />
 
 </RelativeLayout>
