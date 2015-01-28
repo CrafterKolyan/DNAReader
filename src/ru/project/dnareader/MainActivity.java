@@ -50,7 +50,6 @@ public class MainActivity extends Activity {
 
 	private void showFileSelector() {
 
-		/** Sample filters array */
 		final String[] mFileFilter = { ".ab1", ".abi" };
 
 		final FileSelector fileSelector = new FileSelector(MainActivity.this,
