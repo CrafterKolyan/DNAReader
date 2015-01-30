@@ -20,7 +20,7 @@ public class FileSelector {
 
 	private File mCurrentLocation;
 
-	private String finalItimePath;
+	public static String finalItimePath;
 
 	private static final String TAG = "DnaReader";
 
@@ -149,8 +149,9 @@ public class FileSelector {
 
 		graphView.newData(new File(finalItimePath));
 
-		new Download("http://skib6.ru:21180/dna/info/1",
-				"/storage/emulated/0/DNAreader/1234567.txt", mContext);
+		graphView.graphTo(0);
+
+		new Download(mContext, finalItimePath);
 
 	}
 }

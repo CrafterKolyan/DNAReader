@@ -35,9 +35,8 @@ public class MainActivity extends Activity {
 			showFileSelector();
 			break;
 		case R.id.blastSearch:
-			new Download("http://skib6.ru:21180/dna/info/1",
-					"/storage/emulated/0/DNAreader/1234567.txt",
-					MainActivity.this);
+			new Download(MainActivity.this, FileSelector.finalItimePath);
+			break;
 		}
 		return super.onOptionsItemSelected(item);
 	}

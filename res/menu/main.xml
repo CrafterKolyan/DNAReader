@@ -10,6 +10,5 @@
             android:id="@+id/blastSearch"
             android:showAsAction="never"
             android:title="Blast search"/>  
-
         
  </menu>

@@ -24,14 +24,35 @@ public class Download extends Activity {
 	private Context mContext = null;
 	boolean bool = false;
 	public static Vector<Mutation> mutations = null;
+	String mUrl = "";
 
-	public Download(String url, String filePath, Context context) {
+	public Download(Context context, String finalItimePath) {
+		bool = false;
 		// String url = "http://skib6.ru:21180/dna/info/1";
 		// "http://www.ncbi.nlm.nih.gov/blast/Blast.cgi?QUERY=ACCACAGTCGGAGATAATAGGACGAAGTAANACTGACGNGATACTTTCCCGAGCTGAAGTTAACAAATGCACCTGGTTCTTTTACTAAGTGTTCAAATACCAGTGAACTTAAAGAATTTGTCAATCCTAGCCTTCCAAGAGAAGAAAAAGAAGAGAAACTAGAAACAGTTAAAGTGTCTAATAATGCTGAAGACCCCAAAGATCTCATGTTAAGTGGAGAAAGGGTTTTGCAAACTGAAAGATCTGTAGAGAGTAGCAGTATTTCATTGGTACCTGGTACTGATTATGGCACTCAGGAAAGTATCTCGTTACTGGAAGTTAGCACTCTAGGGAAGGCAAAAACAGAACCAAATAAATGTGTGAGTCAGTGTGCAGCATTTGAAAACCCCAAGGGACTAATTCATGGTTGTTCCAAAGATAATAGAAATGACACAGAAGGCTTTAAGTATCCATTGGGACATGAAGTTAACCACAGTCGGGAAACAAGCATAGAAATGGAAGAAAGTGAACTTGATGCTCAGTATTTGCAGAATACATTCAAGGTTTCAAAGCGCCAGTCATTTGCTCTGTTTTCAAATCCAGGAAATGCAGAAGAGGAATGTGCAACATTCTCTGCCCACGTCATCGCTGGCCCCTTGCGAAGAGGATATTCTACGGATCGTAATCG&DATABASE=nr&PROGRAM=blastn&FILTER=L&EXPECT=0.01&FORMAT_TYPE=XML&NCBI_GI=on&HITLIST_SIZE=10&CMD=Put";
-		this.mFilePath = filePath;
+		this.mFilePath = "/storage/emulated/0/DNAreader/mutations.txt";
 		this.mContext = context;
 		mutations = new Vector<Mutation>();
-		new DownloadFileAsync().execute(url);
+		switch (finalItimePath) {
+		case "/storage/emulated/0/DNAreader/QT38-II-1-ex7_7F_E2.ab1":
+			mUrl = "http://skib6.ru:21180/dna/info/1";
+			break;
+		case "/storage/emulated/0/DNAreader/QT32-ex-11_11F_A1.ab1":
+			mUrl = "http://skib6.ru:21180/dna/info/2";
+			break;
+		case "/storage/emulated/0/DNAreader/QT34-ex-4_KCNH2-4Fnew-1_G1.ab1":
+			mUrl = "http://skib6.ru:21180/dna/info/3";
+			break;
+		case "/storage/emulated/0/DNAreader/QT39-ex-12-13_12-13F_E4.ab1":
+			mUrl = "http://skib6.ru:21180/dna/info/4";
+			break;
+		default:
+			mUrl = "http://skib6.ru:21180/dna/info/1";
+			break;
+		}
+		Log.v(TAG, "Download " + finalItimePath);
+
+		new DownloadFileAsync().execute(mUrl);
 	}
 
 	class DownloadFileAsync extends AsyncTask<String, String, String> {
@@ -43,11 +64,12 @@ public class Download extends Activity {
 
 		@Override
 		protected String doInBackground(String... aurl) {
-			int count;
+			int count = 0;
 
 			try {
 
 				URL url = new URL(aurl[0]);
+				// URL url = new URL(mUrl);
 				URLConnection conexion = url.openConnection();
 				conexion.connect();
 
@@ -127,8 +149,12 @@ public class Download extends Activity {
 			Log.d(TAG, "Download onPostExecute ");
 			if (bool)
 				Toast.makeText(mContext,
-						"Ошибка загрузки, возможно проблема с интернетом",
+						"Ошибка загрузки, возможна проблема с интернетом",
 						Toast.LENGTH_LONG).show();
+			else
+				Toast.makeText(mContext, "Мутации загружены удачно",
+						Toast.LENGTH_LONG).show();
+
 		}
 	}
 }
